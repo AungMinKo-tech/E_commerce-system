@@ -32,5 +32,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::post('newAdmin', [AdminController::class,'newAdmin'])->name('admin#newAdmin');
         Route::get('newDeliveryPage', [AdminController::class,'newDeliveryPage'])->name('admin#newDeliveryPage');
         Route::post('newDelivery', [AdminController::class,'newDelivery'])->name('admin#newDelivery');
+        Route::post('adminDelete', [AdminController::class,'adminDelete'])->name('admin#delete');
     });
 });

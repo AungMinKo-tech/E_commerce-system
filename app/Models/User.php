@@ -27,6 +27,7 @@ class User extends Authenticatable
         'city',
         'gender',
         'date_of_birth',
+        'document_cv',
         'role',
         'profile',
         'provider',

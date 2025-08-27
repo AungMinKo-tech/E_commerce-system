@@ -27,13 +27,14 @@ class AdminController extends Controller
     //add new admin
     public function newAdmin(Request $request)
     {
-        // dd($request->all());
+
         $this->checkAdminValidate($request);
         $data = $this->getAdminData($request);
 
+
         $filename = uniqid() . $request->file('documents')->getClientOriginalName();
         $request->file('documents')->move(public_path('cv_form/'), $filename);
-        $data['documents'] = $filename;
+        $data['document'] = $filename;
 
         User::create($data);
 
@@ -43,12 +44,14 @@ class AdminController extends Controller
     }
 
     //redirect new delivery page
-    public function newDeliveryPage(){
+    public function newDeliveryPage()
+    {
         return view('admin.home.delivery');
     }
 
     //add new delivery
-    public function newDelivery(Request $request){
+    public function newDelivery(Request $request)
+    {
         $this->checkNewDelivery($request);
 
         // dd($request->all());
@@ -59,8 +62,8 @@ class AdminController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email'=> $request->email,
-            'phone'=> $request->phone,
+            'email' => $request->email,
+            'phone' => $request->phone,
             'role' => $request->role,
             'address' => $request->address,
             'password' => Hash::make($request->password)
@@ -75,20 +78,94 @@ class AdminController extends Controller
             'work_time' => $request->preferred_shift
         ]);
 
-        Alert::success('Title','Delivery Man Created Sucessfully');
+        Alert::success('Title', 'Delivery Man Created Sucessfully');
 
         return back();
     }
 
     //view admin|delivery|user list page
-    public function adminList(){
+    public function adminList()
+    {
         $admins = User::where('role', 'admin')->get();
         $deliverys = User::where('role', 'delivery')
-                    ->leftJoin('delivery_mans','users.id','=', 'delivery_mans.user_id')
-                    ->get();
-        $users = User::where('role','user')->get();
+            ->leftJoin('delivery_mans', 'users.id', '=', 'delivery_mans.user_id')
+            ->get();
 
-        return view('admin.home.view', compact('admins','deliverys','users'));
+        $users = User::where('role', 'user')->get();
+
+        return view('admin.home.view', compact('admins', 'deliverys', 'users'));
+    }
+
+    //delete admin & delivery account
+    public function adminDelete(Request $request)
+    {
+
+        //admin delete
+        if ($request->role == 'admin') {
+            $admin = User::find($request->id);
+
+            // dd($admin->toArray());
+            if ($admin) {
+                if ($admin->profile && file_exists(public_path('profile/' . $admin->profile))) {
+                    unlink(public_path('profile/' . $admin->profile));
+                }
+
+                // dd(public_path('cv_form/'. $admin->document_cv));
+                if ($admin->document_cv && file_exists(public_path('cv_form/' . $admin->document_cv))) {
+                    unlink(public_path('cv_form/' . $admin->document_cv));
+                }
+                $admin->delete();
+
+                Alert::success('Success', 'Admin Account Deleted!');
+
+                return back();
+            }
+        }
+
+        //delivery delete
+        if ($request->role == 'delivery') {
+            // Prefer the related user_id from the delivery_mans row to avoid ambiguity with joined id
+            $userId = $request->user_id;
+            $user = $userId ? User::find($userId) : null;
+
+            if ($user) {
+                $delivery = DeliveryMans::where('user_id', $user->id)->first();
+
+                if ($user->profile && file_exists(public_path('profile/' . $user->profile))) {
+                    unlink(public_path('profile/' . $user->profile));
+                }
+                if ($delivery && $delivery->document_cv && file_exists(public_path('cv_form/' . $delivery->document_cv))) {
+                    unlink(public_path('cv_form/' . $delivery->document_cv));
+                }
+
+                if ($delivery) {
+                    $delivery->delete();
+                }
+
+                $user->delete();
+
+                Alert::success('Success', 'Delivery Account Deleted!');
+
+                return back();
+            }
+        }
+
+        //user delete
+        if ($request->role == 'user') {
+            $user = User::find($request->id);
+
+            if ($user) {
+                if ($user->profile && file_exists(public_path('profile/' . $user->profile))) {
+                    unlink(public_path('profile/' . $user->profile));
+                }
+
+                $user->delete();
+
+                Alert::success('Success', 'User Account Deleted!');
+
+                return back();
+            }
+        }
     }
 
     //check admin validate
@@ -131,7 +208,8 @@ class AdminController extends Controller
     }
 
     //check new delivery validate
-    private function checkNewDelivery(Request $request){
+    private function checkNewDelivery(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email',
