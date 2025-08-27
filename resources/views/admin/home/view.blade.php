@@ -150,22 +150,22 @@
                                                     @if (Auth::user()->role == "owner")
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-info" title="View">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-warning" title="Edit">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-success" title="Orders">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
+                                                                <form action="{{ route('admin#adminDetails', $admin->id) }}"
+                                                                    method="GET">
+                                                                    <button type="submit" class="btn btn-sm btn-info" title="View">
+                                                                        <i class="fa fa-eye"></i>
+                                                                    </button>
+                                                                </form>
+
                                                                 <form action="{{ route('admin#delete') }}" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id" value="{{ $admin->id }}">
                                                                     <input type="hidden" name="role" value="{{ $admin->role }}">
-                                                                    <input type="hidden" name="document_cv" value="{{ $admin->document_cv }}">
-                                                                    <input type="hidden" name="profile" value="{{ $admin->profile }}">
-                                                                    <button type="submit" class="btn btn-sm btn-danger"
+                                                                    <input type="hidden" name="document_cv"
+                                                                        value="{{ $admin->document_cv }}">
+                                                                    <input type="hidden" name="profile"
+                                                                        value="{{ $admin->profile }}">
+                                                                    <button type="submit" class="btn btn-sm btn-danger ms-2"
                                                                         title="Delete">
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
@@ -174,9 +174,12 @@
                                                         </td>
                                                     @else
                                                         <td class="text-center">
-                                                            <button type="button" class="btn btn-sm btn-info" title="View">
-                                                                <i class="fa fa-eye"></i>
-                                                            </button>
+                                                            <form action="{{ route('admin#adminDetails', $admin->id) }}"
+                                                                method="GET">
+                                                                <button type="sumbit" class="btn btn-sm btn-info" title="View">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </form>
                                                         </td>
                                                     @endif
                                                 </tr>
@@ -248,22 +251,23 @@
                                                     @if (Auth::user()->role == "owner")
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-info" title="View">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-warning" title="Edit">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-success" title="Orders">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
+                                                                <form action="{{ route('admin#deliveryDetails', $delivery->id) }}"
+                                                                    method="GET">
+                                                                    <button type="submit" class="btn btn-sm btn-info" title="View">
+                                                                        <i class="fa fa-eye"></i>
+                                                                    </button>
+                                                                </form>
+
                                                                 <form action="{{ route('admin#delete') }}" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id" value="{{ $delivery->id }}">
                                                                     <input type="hidden" name="role" value="{{ $delivery->role }}">
-                                                                    <input type="hidden" name="user_id" value="{{ $delivery->user_id }}">
-                                                                    <input type="hidden" name="document_cv" value="{{ $delivery->document_cv }}">
-                                                                    <input type="hidden" name="profile" value="{{ $delivery->profile }}">
+                                                                    <input type="hidden" name="user_id"
+                                                                        value="{{ $delivery->user_id }}">
+                                                                    <input type="hidden" name="document_cv"
+                                                                        value="{{ $delivery->document_cv }}">
+                                                                    <input type="hidden" name="profile"
+                                                                        value="{{ $delivery->profile }}">
                                                                     <button type="submit" class="btn btn-sm btn-danger"
                                                                         title="Delete">
                                                                         <i class="fa fa-trash"></i>
@@ -272,11 +276,12 @@
                                                             </div>
                                                         </td>
                                                     @else
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-sm btn-info" title="View">
+                                                        <form action="{{ route('admin#deliveryDetails', $delivery->id) }}"
+                                                            method="GET">
+                                                            <button type="submit" class="btn btn-sm btn-info" title="View">
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
-                                                        </td>
+                                                        </form>
                                                     @endif
                                                 </tr>
                                             @endforeach
@@ -346,12 +351,13 @@
                                                     @if (Auth::user()->role == "owner")
                                                         <td>
                                                             <div class="btn-group" role="group">
-                                                                <button type="button" class="btn btn-sm btn-info" title="View">
-                                                                    <i class="fa fa-eye"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-warning" title="Edit">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </button>
+                                                                <form action="{{ route('admin#adminDetails', $user->id) }}"
+                                                                    method="GET">
+                                                                    <button type="submit" class="btn btn-sm btn-info" title="View">
+                                                                        <i class="fa fa-eye"></i>
+                                                                    </button>
+                                                                </form>
+
                                                                 <button type="button" class="btn btn-sm btn-success" title="Orders">
                                                                     <i class="fa fa-shopping-cart"></i>
                                                                 </button>
@@ -359,7 +365,8 @@
                                                                     @csrf
                                                                     <input type="hidden" name="id" value="{{$user->id}}">
                                                                     <input type="hidden" name="role" value="{{ $user->role }}">
-                                                                    <input type="hidden" name="profile" value="{{ $user->profile }}">
+                                                                    <input type="hidden" name="profile"
+                                                                        value="{{ $user->profile }}">
                                                                     <button type="submit" class="btn btn-sm btn-danger"
                                                                         title="Delete">
                                                                         <i class="fa fa-trash"></i>
@@ -368,11 +375,11 @@
                                                             </div>
                                                         </td>
                                                     @else
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-sm btn-info" title="View">
+                                                        <form action="{{ route('admin#adminDetails', $user->id) }}" method="GET">
+                                                            <button type="submit" class="btn btn-sm btn-info" title="View">
                                                                 <i class="fa fa-eye"></i>
                                                             </button>
-                                                        </td>
+                                                        </form>
                                                     @endif
                                                 </tr>
                                             @endforeach

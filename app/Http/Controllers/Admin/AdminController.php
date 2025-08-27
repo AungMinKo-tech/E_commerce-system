@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\DeliveryMans;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Delivery;
+use App\Models\DeliveryMans;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -27,14 +28,13 @@ class AdminController extends Controller
     //add new admin
     public function newAdmin(Request $request)
     {
-
         $this->checkAdminValidate($request);
-        $data = $this->getAdminData($request);
-
 
         $filename = uniqid() . $request->file('documents')->getClientOriginalName();
         $request->file('documents')->move(public_path('cv_form/'), $filename);
-        $data['document'] = $filename;
+        $request->documents = $filename;
+
+        $data = $this->getAdminData($request);
 
         User::create($data);
 
@@ -106,15 +106,15 @@ class AdminController extends Controller
 
             // dd($admin->toArray());
             if ($admin) {
-                if ($admin->profile && file_exists(public_path('profile/' . $admin->profile))) {
-                    unlink(public_path('profile/' . $admin->profile));
-                }
 
-                // dd(public_path('cv_form/'. $admin->document_cv));
-                if ($admin->document_cv && file_exists(public_path('cv_form/' . $admin->document_cv))) {
+                if ($admin && $admin->document_cv && file_exists(public_path('cv_form/' . $admin->document_cv))) {
                     unlink(public_path('cv_form/' . $admin->document_cv));
                 }
-                $admin->delete();
+
+                $admin->update([
+                    'role' => 'user',
+                    'document_cv' => NULL
+                ]);
 
                 Alert::success('Success', 'Admin Account Deleted!');
 
@@ -131,9 +131,6 @@ class AdminController extends Controller
             if ($user) {
                 $delivery = DeliveryMans::where('user_id', $user->id)->first();
 
-                if ($user->profile && file_exists(public_path('profile/' . $user->profile))) {
-                    unlink(public_path('profile/' . $user->profile));
-                }
                 if ($delivery && $delivery->document_cv && file_exists(public_path('cv_form/' . $delivery->document_cv))) {
                     unlink(public_path('cv_form/' . $delivery->document_cv));
                 }
@@ -142,7 +139,9 @@ class AdminController extends Controller
                     $delivery->delete();
                 }
 
-                $user->delete();
+                $user->update([
+                    'role' => 'user'
+                ]);
 
                 Alert::success('Success', 'Delivery Account Deleted!');
 
@@ -166,6 +165,33 @@ class AdminController extends Controller
                 return back();
             }
         }
+    }
+
+    //admin delivery user details
+    public function adminDetails($id){
+        $user = User::find($id);
+
+        return view('admin.home.details', compact('user'));
+    }
+
+    //delivery details
+    public function deliveryDetails($id){
+        $delivery = DeliveryMans::query()
+        ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
+        ->where('delivery_mans.id', $id)
+        ->select([
+            'users.*',
+            'delivery_mans.id as delivery_man_id',
+            'delivery_mans.user_id as delivery_user_id',
+            'delivery_mans.document_cv',
+            'delivery_mans.license',
+            'delivery_mans.vehicle',
+            'delivery_mans.delivery_zone',
+            'delivery_mans.work_time',
+        ])
+        ->first();
+
+        return view('admin.home.deliveryDetails', compact('delivery'));
     }
 
     //check admin validate

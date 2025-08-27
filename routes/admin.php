@@ -26,6 +26,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     });
 
     Route::get('adminList', [AdminController::class,'adminList'])->name('admin#adminList');
+    Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');
+    Route::get('deliveryDetails/{id}', [AdminController::class,'deliveryDetails'])->name('admin#deliveryDetails');
 
     Route::group(['middleware'=> 'ownerMiddleware'], function () {
         Route::get('newAdminPage', [AdminController::class,'newAdminPage'])->name('admin#newAdminPage');
