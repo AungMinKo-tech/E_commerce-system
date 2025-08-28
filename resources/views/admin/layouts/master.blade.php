@@ -80,7 +80,14 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="#sidebarLayouts">
+                                <a href="{{route('admin#addColor')}}">
+                                    <i class="fas fa-paint-roller"></i>
+                                    <p>Add Color</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin#addProductPage') }}">
                                     <i class="fas fa-plus"></i>
                                     <p>Add Product</p>
                                 </a>

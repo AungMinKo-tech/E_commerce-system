@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\CategoryController;
 
 Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin#dashboard');
@@ -16,6 +17,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
             Route::post('update/{id}', [CategoryController::class, 'updateCategory'])->name('admin#categoryUpdate');
             Route::get('delete/{id}', [CategoryController::class, 'deleteCategory'])->name('admin#categoryDelete');
         });
+
+    Route::group(['prefix' => 'product'], function () {
+        // Route::get('list', [ProductController::class,'listProduct'])->name('admin#product');
+        Route::get('addProductPage', [ProductController::class, 'addProductPage'])->name('admin#addProductPage');
+        Route::post('createProduct', [ProductController::class,'createProduct'])->name('admin#createProduct');
+    });
+
+    Route::group(['prefix'=> 'color'], function () {
+        Route::get('addColor', [AdminController::class,'addColor'])->name('admin#addColor');
+        Route::post('createColor', [AdminController::class, 'createColor'])->name('admin#createColor');
+        Route::get('delete/{id}', [AdminController::class,'deleteColor'])->name('admin#deleteColor');
+    });
 
     Route::group(['prefix'=> 'profile'], function () {
         Route::get('changePassword', [ProfileController::class,'changePassword'])->name('admin#changePassword');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Color;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Delivery;
@@ -192,6 +193,33 @@ class AdminController extends Controller
         ->first();
 
         return view('admin.home.deliveryDetails', compact('delivery'));
+    }
+
+    //add color page
+    public function addColor(){
+        $colors = Color::paginate(5);
+
+        return view('admin.color.add', compact('colors'));
+    }
+
+    //create color
+    public function createColor(Request $request){
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        Color::create($request->all());
+
+        Alert::success('Title','Successful Created Color');
+
+        return back();
+    }
+
+    //delete color
+    public function deleteColor($id){
+        Color::where('id', $id)->delete();
+
+        return back();
     }
 
     //check admin validate

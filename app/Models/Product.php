@@ -16,11 +16,16 @@ class Product extends Model
         'photo',
         'description',
         'category_id',
-        'stock',
-        'color_id'
     ];
 
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+	public function color()
+	{
+		return $this->belongsToMany(Color::class, 'product__colors', 'product_id', 'color_id')
+			->withPivot('stock')
+			->withTimestamps();
+	}
 }
