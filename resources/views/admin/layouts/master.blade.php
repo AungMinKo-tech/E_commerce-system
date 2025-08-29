@@ -94,7 +94,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="#sidebarLayouts">
+                                <a href="{{ route('admin#productList') }}">
                                     <i class="fas fa-list-ol"></i>
                                     <p>Product List</p>
                                 </a>

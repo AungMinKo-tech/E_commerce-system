@@ -7,16 +7,26 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\Product_Color;
+use App\Models\ProductColor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProductController extends Controller
 {
-    // //redirect product list page
-    // public function listProduct(){
-    //     return view("");
-    // }
+    //redirect product list page
+    public function listProduct(){
+        $products = Product::select('products.id','products.name as product_name', 'products.price', 'products.photo', 'products.description', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at')
+                 ->leftJoin('categories','products.category_id','=','categories.id')
+                 ->leftJoin('product_colors','products.id','=','product_colors.product_id')
+                 ->leftJoin('colors','product_colors.color_id','=','colors.id')
+                 ->orderBy('products.created_at','desc')
+                 ->paginate(5);
+
+        $categories = Category::get();
+
+        return view("admin.product.list", compact("products", 'categories'));
+    }
 
     //redirect add product page
     public function addProductPage(){
@@ -44,7 +54,7 @@ class ProductController extends Controller
         ]);
 
         foreach ($request->colors_id as $key => $color_id) {
-            Product_Color::create([
+            ProductColor::create([
                 'product_id' => $product->id,
                 'color_id'=> $color_id,
                 'stock' => $request->stocks[$key]

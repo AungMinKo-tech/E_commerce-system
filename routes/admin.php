@@ -19,7 +19,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         });
 
     Route::group(['prefix' => 'product'], function () {
-        // Route::get('list', [ProductController::class,'listProduct'])->name('admin#product');
+        Route::get('list', [ProductController::class,'listProduct'])->name('admin#productList');
         Route::get('addProductPage', [ProductController::class, 'addProductPage'])->name('admin#addProductPage');
         Route::post('createProduct', [ProductController::class,'createProduct'])->name('admin#createProduct');
     });

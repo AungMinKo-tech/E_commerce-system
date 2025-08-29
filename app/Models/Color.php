@@ -12,11 +12,4 @@ class Color extends Model
     protected $fillable = [
         'name'
     ];
-
-	public function products()
-	{
-		return $this->belongsToMany(Product::class, 'product__colors', 'color_id', 'product_id')
-			->withPivot('stock')
-			->withTimestamps();
-	}
 }
