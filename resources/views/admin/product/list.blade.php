@@ -29,18 +29,18 @@
                             <select class="form-select" id="categoryFilter">
                                 <option value="">All Categories</option>
                                 @foreach ($categories as $category)
-                                <option value="{{ $category->name }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class=" col-md-3">
-                                    <label class="form-label fw-semibold">Status Filter</label>
-                                    <select class="form-select" id="statusFilter">
-                                        <option value="">All Status</option>
-                                        <option value="Stock">Stock</option>
-                                        <option value="Low Stock">Low Stock</option>
-                                        <option value="Out of Stock">Out of Stock</option>
-                                    </select>
+                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class=" col-md-3">
+                            <label class="form-label fw-semibold">Status Filter</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="Stock">Stock</option>
+                                <option value="Low Stock">Low Stock</option>
+                                <option value="Out of Stock">Out of Stock</option>
+                            </select>
                         </div>
 
                     </div>
@@ -115,12 +115,24 @@
                                                 <button type="button" class="btn btn-sm btn-outline-primary" title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+
+                                                <form action="{{ route('admin#editProduct', $item->product_id) }}" method="GET">
+
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form action="{{route('admin#deleteProduct')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{$item->product_id}}">
+                                                    <input type="hidden" name="product_color_id"
+                                                        value="{{$item->product_color_id}}">
+                                                    <input type="hidden" name="photo" value="{{$item->photo}}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -130,16 +142,6 @@
                         </table>
                     </div>
                     <span class="d-flex justify-content-end mt-3">{{ $products->links() }}</span>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Total Products</div>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <canvas id="barChart"></canvas>
-                    </div>
                 </div>
             </div>
         </div>
@@ -193,41 +195,6 @@
                     $(this).toggle(rowStatus === status);
                 });
             });
-        });
-
-        let productLabels = @json($products->pluck('product_name'));
-        let colorName = @json($products->pluck('color_name'));
-        let data = @json($products->pluck('stock'));
-
-        var myBarChart = new Chart(barChart, {
-            type: "bar",
-            data: {
-                labels:  productLabels,
-
-                datasets: [
-                    {
-                        label: "Stocks",
-                        backgroundColor: "rgb(23, 125, 255)",
-                        borderColor: "rgb(23, 125, 255)",
-                        data: data,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [
-                        {
-                            ticks: {
-                                beginAtZero: true,
-                                stepSize: 5,
-                                suggestedMax: 30
-                            },
-                        },
-                    ],
-                },
-            },
         });
     </script>
 @endsection

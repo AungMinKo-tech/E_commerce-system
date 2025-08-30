@@ -22,7 +22,7 @@
                                                 <div class="mt-2">No image selected</div>
                                             </div>
                                         </div>
-                                        <input type="file" name="image" id="productImage" class="form-control" accept="image/*" />
+                                        <input type="file" name="photo" id="productImage" class="form-control" accept="image/*" />
                                     </div>
 
                                     <div class="col-md-8">

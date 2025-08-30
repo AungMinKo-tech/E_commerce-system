@@ -19,9 +19,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         });
 
     Route::group(['prefix' => 'product'], function () {
-        Route::get('list', [ProductController::class,'listProduct'])->name('admin#productList');
+        Route::get('list/{action?}', [ProductController::class,'listProduct'])->name('admin#productList');
         Route::get('addProductPage', [ProductController::class, 'addProductPage'])->name('admin#addProductPage');
         Route::post('createProduct', [ProductController::class,'createProduct'])->name('admin#createProduct');
+        Route::post('deleteProduct', [ProductController::class,'deleteProduct'])->name('admin#deleteProduct');
+        Route::get('editProduct/{id}', [ProductController::class,'editProduct'])->name('admin#editProduct');
+        Route::post('updateProduct', [ProductController::class,'updateProduct'])->name('admin#updateProduct');
     });
 
     Route::group(['prefix'=> 'color'], function () {
