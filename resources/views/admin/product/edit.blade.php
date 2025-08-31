@@ -22,13 +22,15 @@
 
                                 <div class="row g-4">
                                     <!-- Product Image Section -->
-                                    <input type="hidden" name="product_id" value="{{$product->product_id}}">
+                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                    <input type="hidden" name="productImage" value="{{ $product->photo }}">
+
                                     <div class="col-md-4">
                                         <label class="form-label fw-semibold">Product Image</label>
                                         <div class="border rounded d-flex align-items-center justify-content-center mb-2" style="width: 100%; max-width: 260px; aspect-ratio: 1/1; overflow: hidden; background: #f8f9fa;">
                                             <img id="imagePreview" src="{{ asset('product_image/' . $product->photo) }}" alt="Product Image" style="width:100%; height:100%; object-fit:cover;" />
                                         </div>
-                                        <input type="file" name="image" id="productImage" class="form-control" accept="image/*" />
+                                        <input type="file" name="photo" id="productImage" class="form-control" accept="image/*" />
                                     </div>
 
                                     <!-- Product Details Section -->
@@ -38,7 +40,7 @@
                                             <div class="col-md-12">
                                                 <label for="productName" class="form-label fw-semibold">Product Name <span class="text-danger">*</span></label>
                                                 <input type="text" id="productName" class="form-control @error('name') is-invalid @enderror"
-                                                       placeholder="Enter product name" name="name" value="{{ old('name', $product->product_name) }}"/>
+                                                       placeholder="Enter product name" name="name" value="{{ old('name', $product->name) }}"/>
                                                 @error('name')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror

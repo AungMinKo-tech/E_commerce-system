@@ -112,9 +112,12 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary" title="View">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
+                                                <form action="{{ route('admin#detailsProduct', $item->product_id) }}" method="GET">
+
+                                                    <button type="submit" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </form>
 
                                                 <form action="{{ route('admin#editProduct', $item->product_id) }}" method="GET">
 

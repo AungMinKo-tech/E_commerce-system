@@ -49,7 +49,7 @@ class ProductController extends Controller
         $request->file('photo')->move(public_path('product_image/'), $filename);
         $data['photo'] = $filename;
 
-        $product = Product::create( $data );
+        $product = Product::create($data);
 
         foreach ($request->colors_id as $key => $color_id) {
             ProductColor::create([
@@ -98,10 +98,16 @@ class ProductController extends Controller
     //edit page view
     public function editProduct($id)
     {
-        $product = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at')
+        $product = Product::where('products.id', $id)
             ->leftJoin('product_colors', 'products.id', '=', 'product_colors.product_id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('colors', 'product_colors.color_id', '=', 'colors.id')
+            ->select(
+                'products.*',
+                'categories.name as category_name',
+                'colors.name as color_name',
+                'product_colors.stock'
+            )
             ->first();
 
         $categories = Category::all();
@@ -113,34 +119,72 @@ class ProductController extends Controller
     //update product
     public function updateProduct(Request $request)
     {
+        // dd($request->all());
 
-        $this->checkProductValidate($request, 'updateProduct');
+        // $this->checkProductValidate($request, 'updateProduct');
 
-        $product = Product::find($request->product_id);
         $data = $this->getData($request);
-        $remainProduct = ProductColor::where('product_id', $request->product_id)->count();
 
-        if ($remainProduct != 1) {
-            if ($request->hasFile('photo')) {
-                $filename = uniqid() . $request->file("photo")->getClientOriginalName();
-                $request->file("photo")->move(public_path('product_image/') , $filename);
-                $data['photo'] = $filename;
-            }else{
-                $data['photo'] = $request->photo;
+        // Handle photo update
+        if ($request->hasFile('photo')) {
+            $oldImageName = $request->productImage; //old image name
+
+            if ($oldImageName && file_exists(public_path('product_image/' . $oldImageName))) {
+                unlink(public_path('product_image/' . $oldImageName));
             }
-        }else{
-            //
+
+            $filename = uniqid() . $request->file("photo")->getClientOriginalName();
+            $request->file("photo")->move(public_path('product_image/'), $filename);
+            $data['photo'] = $filename;
+        } else {
+            $data['photo'] = $request->productImage;
         }
 
-        dd($request->all());
+        Product::where('id', $request->product_id)->update($data);
 
+        // Update current product color
+        $existingProductColor = ProductColor::where('product_id', $request->product_id)->first();
+
+        if (!$existingProductColor) {
+            // Update existing record with new color and stock
+            $existingProductColor->update([
+                'color_id' => $request->color_id,
+                'stock' => $request->stock
+            ]);
+        }else{
+            $existingProductColor->update([
+                'stock' => $request->stock
+            ]);
+        }
+
+        Alert::success('Title', 'Product Changed Successfully');
+
+        return to_route('admin#productList');
+    }
+
+    //redirect details page
+    public function detailsProduct($id){
+        $product = Product::where('products.id', $id)
+            ->leftJoin('product_colors', 'products.id', '=', 'product_colors.product_id')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('colors', 'product_colors.color_id', '=', 'colors.id')
+            ->select(
+                'products.*',
+                'categories.name as category_name',
+                'colors.name as color_name',
+                'product_colors.stock'
+            )
+            ->first();
+
+        return view('admin.product.details', compact('product'));
     }
 
     //get data
-    private function getData($request){
+    private function getData($request)
+    {
         return [
             'name' => $request->name,
-            'category_id' => $request->categoryId,
+            'category_id' => $request->category_id,
             'price' => $request->price,
             'description' => $request->description,
         ];

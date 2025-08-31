@@ -25,6 +25,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::post('deleteProduct', [ProductController::class,'deleteProduct'])->name('admin#deleteProduct');
         Route::get('editProduct/{id}', [ProductController::class,'editProduct'])->name('admin#editProduct');
         Route::post('updateProduct', [ProductController::class,'updateProduct'])->name('admin#updateProduct');
+        Route::get('details/{id}', [ProductController::class,'detailsProduct'])->name('admin#detailsProduct');
     });
 
     Route::group(['prefix'=> 'color'], function () {
