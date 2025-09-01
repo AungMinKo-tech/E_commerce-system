@@ -116,7 +116,7 @@
 
                             @if (Auth::user()->role == 'owner')
                                 <li class="nav-item">
-                                    <a href="#sidebarLayouts">
+                                    <a href="{{route('admin#listPayment')}}">
                                         <i class="fas fa-credit-card"></i>
                                         <p>Payment Method</p>
                                     </a>

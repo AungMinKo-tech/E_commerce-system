@@ -6,7 +6,6 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div>
                     <h3 class="fw-bold mb-0">Product Details</h3>
-                    <p class="text-muted mb-0">View detailed information about the product</p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('admin#productList') }}" class="btn btn-outline-secondary">
@@ -29,9 +28,8 @@
                                 <div class="col-md-5">
                                     <div class="product-image-container text-center">
                                         <img src="{{ asset('product_image/' . $product->photo) }}"
-                                             alt="{{ $product->name }}"
-                                             class="img-fluid rounded shadow-sm"
-                                             style="max-width: 100%; height: 300px; object-fit: cover;">
+                                            alt="{{ $product->name }}" class="img-fluid rounded shadow-sm"
+                                            style="max-width: 100%; height: 300px; object-fit: cover;">
                                     </div>
                                 </div>
 
@@ -41,12 +39,13 @@
                                         <h2 class="fw-bold text-dark mb-3">{{ $product->name }}</h2>
 
                                         <div class="mb-3">
-                                            <span class="badge bg-primary fs-6 px-3 py-2">{{ $product->category_name }}</span>
+                                            <span
+                                                class="badge bg-primary fs-6 px-3 py-2">{{ $product->category_name }}</span>
                                         </div>
 
                                         <div class="price-section mb-4">
-                                            <h3 class="text-primary fw-bold mb-1">MMK {{ number_format($product->price) }}</h3>
-                                            <small class="text-muted">Price per unit</small>
+                                            <h3 class="text-primary fw-bold mb-1">MMK {{ number_format($product->price) }}
+                                            </h3>
                                         </div>
 
                                         <div class="stock-section mb-4">
@@ -58,7 +57,8 @@
                                                     </span>
                                                 @elseif($product->stock <= 3)
                                                     <span class="badge bg-warning fs-6 px-3 py-2">
-                                                        <i class="fas fa-exclamation-triangle me-1"></i>Low Stock ({{ $product->stock }})
+                                                        <i class="fas fa-exclamation-triangle me-1"></i>Low Stock
+                                                        ({{ $product->stock }})
                                                     </span>
                                                 @else
                                                     <span class="badge bg-success fs-6 px-3 py-2">
@@ -70,7 +70,8 @@
                                             @if($product->color_name)
                                                 <div class="d-flex align-items-center">
                                                     <h6 class="fw-semibold mb-0 me-3">Color:</h6>
-                                                    <span class="badge bg-secondary fs-6 px-3 py-2">{{ $product->color_name }}</span>
+                                                    <span
+                                                        class="badge bg-secondary fs-6 px-3 py-2">{{ $product->color_name }}</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -91,7 +92,7 @@
                                 <i class="fas fa-chart-bar me-2"></i>Product Statistics
                             </h5>
                         </div>
-                                                <div class="card-body">
+                        <div class="card-body">
                             <div class="stat-item mb-3">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="text-muted">Orders</span>
@@ -159,7 +160,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="fw-semibold text-muted" style="width: 200px;">Product ID</td>
-                                            <td class="fw-bold">#{{ $product->id }}</td>
+                                            <td class="fw-bold">{{ $product->id }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-semibold text-muted">Product Name</td>
@@ -188,12 +189,12 @@
                                             </td>
                                         </tr>
                                         @if($product->color_name)
-                                        <tr>
-                                            <td class="fw-semibold text-muted">Color</td>
-                                            <td>
-                                                <span class="badge bg-secondary">{{ $product->color_name }}</span>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td class="fw-semibold text-muted">Color</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">{{ $product->color_name }}</span>
+                                                </td>
+                                            </tr>
                                         @endif
                                         <tr>
                                             <td class="fw-semibold text-muted">Created Date</td>

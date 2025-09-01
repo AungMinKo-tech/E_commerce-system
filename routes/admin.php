@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
@@ -52,5 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::get('newDeliveryPage', [AdminController::class,'newDeliveryPage'])->name('admin#newDeliveryPage');
         Route::post('newDelivery', [AdminController::class,'newDelivery'])->name('admin#newDelivery');
         Route::post('adminDelete', [AdminController::class,'adminDelete'])->name('admin#delete');
+
+        //payment
+        Route::get('listPayment', [PaymentController::class,'listPayment'])->name('admin#listPayment');
+        Route::post('paymentCreate', [PaymentController::class,'paymentCreate'])->name('admin#paymentCreate');
     });
+
 });
