@@ -14,7 +14,10 @@
 
     <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="{{ asset('user/css/bootstrap.min.css') }}" />
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous"> --}}
+    {{--
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    --}}
 
     <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="{{ asset('user/css/slick.css') }}" />
@@ -128,19 +131,28 @@
                             <!-- Profile -->
                             <div class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-user-circle" style="font-size: 32px; vertical-align: middle;"></i>
-                                    <span>{{Auth::check() ? Auth::user()->name : 'Guest'}}</span>
+                                    @if(Auth::check() && Auth::user()->profile)
+                                        <img src="{{ asset('profile/' . Auth::user()->profile) }}" alt="Profile"
+                                            style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #fff;">
+                                    @else
+                                        <img src="{{ asset('default/default_profile.jpg') }}" alt="Profile"
+                                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; vertical-align: middle; border: 2px solid #fff;">
+                                    @endif
                                     <div class="qty" style="visibility: hidden;">0</div>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-right p-0 border-0 shadow" style="min-width:220px; background: #f8f9fa;">
+                                <ul class="dropdown-menu dropdown-menu-right p-0 border-0 shadow"
+                                    style="min-width:220px; background: #f8f9fa;">
                                     <li class="border-bottom">
-                                        <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center" style="font-weight: 500;">
+                                        <a href="{{route('user#editProfile')}}"
+                                            class="dropdown-item py-3 px-4 d-flex align-items-center"
+                                            style="font-weight: 500;">
                                             <i class="fa fa-user mr-2 text-primary"></i>
                                             Change Profile
                                         </a>
                                     </li>
                                     <li class="border-bottom">
-                                        <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center" style="font-weight: 500;">
+                                        <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center"
+                                            style="font-weight: 500;">
                                             <i class="fa fa-lock mr-2 text-warning"></i>
                                             Change Password
                                         </a>
@@ -148,7 +160,9 @@
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST" class="m-0">
                                             @csrf
-                                            <button type="submit" class="dropdown-item py-3 px-4 d-flex align-items-center text-danger" style="font-weight: 500; background: none; border: none; width: 100%;">
+                                            <button type="submit"
+                                                class="dropdown-item py-3 px-4 d-flex align-items-center text-danger"
+                                                style="font-weight: 500; background: none; border: none; width: 100%;">
                                                 <i class="fa fa-sign-out mr-2"></i>
                                                 Logout
                                             </button>
@@ -304,5 +318,9 @@
     <script src="{{ asset('user/js/main.js') }}"></script>
 
 </body>
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script> --}}
+{{--
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script> --}}
+
 </html>
