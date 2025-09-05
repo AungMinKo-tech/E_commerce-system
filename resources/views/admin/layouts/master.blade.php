@@ -123,7 +123,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="#sidebarLayouts">
+                                    <a href="{{ route('admin#voucherList') }}">
                                         <i class="fas fa-ticket-alt"></i>
                                         <p>Manage Voucher</p>
                                     </a>

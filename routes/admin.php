@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\VoucherController;
 
 Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin#dashboard');
@@ -57,6 +58,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         //payment
         Route::get('listPayment', [PaymentController::class,'listPayment'])->name('admin#listPayment');
         Route::post('paymentCreate', [PaymentController::class,'paymentCreate'])->name('admin#paymentCreate');
+
+        //voucher
+        Route::group(['prefix' => 'voucher'], function () {
+            Route::get('list', [VoucherController::class, 'listVoucher'])->name('admin#voucherList');
+            Route::get('createPage', [VoucherController::class, 'createVoucherPage'])->name('admin#voucherCreatePage');
+            Route::post('create', [VoucherController::class, 'createVoucher'])->name('admin#voucherCreate');
+            Route::get('edit/{id}', [VoucherController::class, 'editVoucher'])->name('admin#voucherEdit');
+            Route::post('update/{id}', [VoucherController::class, 'updateVoucher'])->name('admin#voucherUpdate');
+            Route::delete('delete/{id}', [VoucherController::class, 'deleteVoucher'])->name('admin#voucherDelete');
+        });
     });
 
 });
