@@ -51,48 +51,23 @@ class VoucherController extends Controller
     {
         $voucher = Voucher::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
-            'voucher_code' => 'required|string|max:50|unique:vouchers,voucher_code,' . $id,
-            'voucher_price' => 'required|numeric|min:0',
-            'max_usage' => 'required|integer|min:1',
-            'status' => 'required|in:active,inactive',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-        ], [
-            'voucher_code.required' => 'Voucher code is required.',
-            'voucher_code.unique' => 'This voucher code already exists.',
-            'voucher_price.required' => 'Discount amount is required.',
-            'voucher_price.min' => 'Discount amount must be at least 0.',
-            'max_usage.required' => 'Maximum usage is required.',
-            'max_usage.min' => 'Maximum usage must be at least 1.',
-            'status.required' => 'Status is required.',
-            'start_date.required' => 'Start date is required.',
-            'end_date.required' => 'End date is required.',
-            'end_date.after' => 'End date must be after start date.',
+        $request->merge(['id' => $id]);
+
+        $this->checkVoucher($request);
+
+        $voucher->update([
+            'voucher_code' => $request->voucher_code,
+            'voucher_price' => $request->voucher_price,
+            'max_usage' => $request->max_usage,
+            'use_count' => 0,
+            'status' => $request->status,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+        Alert::success('Title', 'Voucher Updated Successfully!');
 
-        try {
-            $voucher->update([
-                'voucher_code' => strtoupper($request->voucher_code),
-                'voucher_price' => $request->voucher_price,
-                'max_usage' => $request->max_usage,
-                'status' => $request->status,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-            ]);
-
-            Alert::success('Success', 'Voucher updated successfully!');
-            return redirect()->route('admin#voucherList');
-        } catch (\Exception $e) {
-            Alert::error('Error', 'Failed to update voucher. Please try again.');
-            return redirect()->back()->withInput();
-        }
+        return to_route('admin#voucherList');
     }
 
     public function deleteVoucher($id)
@@ -113,7 +88,7 @@ class VoucherController extends Controller
     private function checkVoucher(Request $request)
     {
         $request->validate([
-            'voucher_code' => 'required|string|max:50|unique:vouchers,voucher_code',
+            'voucher_code' => 'required|string|max:50|unique:vouchers,voucher_code,'. $request->id,
             'voucher_price' => 'required|numeric|min:0',
             'max_usage' => 'required|integer|min:1',
             'status' => 'required',

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfileController extends Controller
@@ -42,6 +43,34 @@ class ProfileController extends Controller
         return to_route('user#home');
     }
 
+    //redirect change password page
+    public function changePasswordPage(){
+        return view('user.profile.changePassword');
+    }
+
+    //change password
+    public function changePassword(Request $request){
+        $this->checkPasswordValidate($request);
+
+        $userRegisteredPassword = $request->user()->password; //user registered password
+
+        if (Hash::check($request->current_password, $userRegisteredPassword)) {
+
+            User::where('id', Auth::user()->id)->update([
+                'password' => Hash::make($request->new_password), //update the password
+            ]);
+
+            Alert::success('Success', 'စကားဝှက်ပြောင်းလဲပြီးပါပြီ။');
+
+            return redirect('user/home');
+
+        } else {
+            Alert::error('Fail', 'စကားဝှက်အဟောင်း မမှန်ပါ။');
+
+            return back();
+        }
+    }
+
     //get profile data
     private function getProfileData(Request $request){
         return [
@@ -66,6 +95,21 @@ class ProfileController extends Controller
             'address' => 'required',
             'gender' => 'required',
             'city' => 'required',
+        ]);
+    }
+
+    //password validate
+    private function checkPasswordValidate($request){
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_password' => 'required|same:new_password',
+        ], [
+            'current_password.required' => 'စကားဝှက်ဟောင်း လိုအပ်ပါသည်။',
+            'new_password.required' => 'စကားဝှက်အသစ် လိုအပ်သည်။',
+            'new_password.min' => 'စကားဝှက်အသစ်သည် အနည်းဆုံး အက္ခရာ 6 လုံးရှိရမည်။',
+            'confirm_password.required' => 'စကားဝှက်ကို အတည်ပြုရန် လိုအပ်ပါသည်။',
+            'confirm_password.same' => 'စကားဝှက်ကို အတည်ပြုရန် စကားဝှက်အသစ်နှင့် ကိုက်ညီရမည်။',
         ]);
     }
 }

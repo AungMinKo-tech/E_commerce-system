@@ -129,14 +129,12 @@
                             <!-- /Cart -->
 
                             <!-- Profile -->
-                            <div class="dropdown">
+                            <div class="dropdown header-profile">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     @if(Auth::check() && Auth::user()->profile)
-                                        <img src="{{ asset('profile/' . Auth::user()->profile) }}" alt="Profile"
-                                            style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #fff;">
+                                        <img src="{{ asset('profile/' . Auth::user()->profile) }}" alt="Profile">
                                     @else
-                                        <img src="{{ asset('default/default_profile.jpg') }}" alt="Profile"
-                                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; vertical-align: middle; border: 2px solid #fff;">
+                                        <img src="{{ asset('default/default_profile.jpg') }}" alt="Profile">
                                     @endif
                                     <div class="qty" style="visibility: hidden;">0</div>
                                 </a>
@@ -151,7 +149,7 @@
                                         </a>
                                     </li>
                                     <li class="border-bottom">
-                                        <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center"
+                                        <a href="{{route('user#changePasswordPage')}}" class="dropdown-item py-3 px-4 d-flex align-items-center"
                                             style="font-weight: 500;">
                                             <i class="fa fa-lock mr-2 text-warning"></i>
                                             Change Password
@@ -192,12 +190,10 @@
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Hot Deals</a></li>
                     <li><a href="#">Categories</a></li>
-                    <li><a href="#">Laptops</a></li>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Cameras</a></li>
-                    <li><a href="#">Accessories</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Map</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
                 <!-- /NAV -->
             </div>
@@ -208,6 +204,7 @@
     <!-- /NAVIGATION -->
 
     @yield('content')
+    @include('sweetalert::alert')
 
     <!-- FOOTER -->
     <footer id="footer">

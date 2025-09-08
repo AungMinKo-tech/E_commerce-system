@@ -15,7 +15,6 @@
                         <div class="card-body">
                             <form action="{{ route('admin#voucherUpdate', $voucher->id) }}" method="POST">
                                 @csrf
-                                @method('PUT')
                                 <div class="row g-4">
                                     <div class="col-md-6">
                                         <label for="voucher_code" class="form-label fw-semibold">Voucher Code <span class="text-danger">*</span></label>
@@ -80,20 +79,6 @@
                                         @error('end_date')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div>
-
-                                    <!-- Usage Information (Read-only) -->
-                                    <div class="col-12">
-                                        <div class="alert alert-info">
-                                            <h6 class="alert-heading">Usage Information</h6>
-                                            <p class="mb-0">
-                                                <strong>Current Usage:</strong> {{ $voucher->use_count }} / {{ $voucher->max_usage }}
-                                                <span class="ms-3">
-                                                    <strong>Usage Percentage:</strong>
-                                                    {{ $voucher->max_usage > 0 ? round(($voucher->use_count / $voucher->max_usage) * 100, 1) : 0 }}%
-                                                </span>
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
 

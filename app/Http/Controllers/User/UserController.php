@@ -13,7 +13,10 @@ class UserController extends Controller
     public function home()
     {
         $categories = Category::all();
-        $products = Product::all();
+
+        $products = Product::select('products.*', 'categories.name as category_name')
+                    ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                    ->get();
 
         return view('user.home.list', compact('categories', 'products'));
     }

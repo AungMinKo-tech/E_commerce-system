@@ -38,7 +38,7 @@
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex align-items-center">
-                                                            <span class="badge bg-primary me-2">{{ $voucher->voucher_code }}</span>
+                                                            <strong class="me-2">{{ $voucher->voucher_code }}</strong>
                                                         </div>
                                                     </td>
                                                     <td>
@@ -49,13 +49,6 @@
                                                             <span class="me-2">{{ $voucher->use_count }}</span>
                                                             <span class="text-muted">/</span>
                                                             <span class="ms-2">{{ $voucher->max_usage }}</span>
-                                                            <div class="progress ms-2" style="width: 60px; height: 6px;">
-                                                                @php
-                                                                    $usagePercentage = $voucher->max_usage > 0 ? ($voucher->use_count / $voucher->max_usage) * 100 : 0;
-                                                                @endphp
-                                                                <div class="progress-bar {{ $usagePercentage >= 100 ? 'bg-danger' : ($usagePercentage >= 80 ? 'bg-warning' : 'bg-success') }}"
-                                                                     style="width: {{ min($usagePercentage, 100) }}%"></div>
-                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td>

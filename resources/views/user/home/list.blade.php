@@ -7,60 +7,6 @@
         <div class="container">
             <!-- row -->
             <div class="row">
-                <!-- shop -->
-                <div class="col-md-4 col-xs-6">
-                    <div class="shop">
-                        <div class="shop-img">
-                            <img src="./img/shop01.png" alt="">
-                        </div>
-                        <div class="shop-body">
-                            <h3>Laptop<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /shop -->
-
-                <!-- shop -->
-                <div class="col-md-4 col-xs-6">
-                    <div class="shop">
-                        <div class="shop-img">
-                            <img src="./img/shop03.png" alt="">
-                        </div>
-                        <div class="shop-body">
-                            <h3>Accessories<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /shop -->
-
-                <!-- shop -->
-                <div class="col-md-4 col-xs-6">
-                    <div class="shop">
-                        <div class="shop-img">
-                            <img src="./img/shop02.png" alt="">
-                        </div>
-                        <div class="shop-body">
-                            <h3>Cameras<br>Collection</h3>
-                            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- /shop -->
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /SECTION -->
-
-    <!-- SECTION -->
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
 
                 <!-- section title -->
                 <div class="col-md-12">
@@ -92,10 +38,9 @@
                                             <img src="{{ asset('product_image/'. $product->photo) }}">
                                         </div>
                                         <div class="product-body">
-                                            <p class="product-category">Category</p>
+                                            <p class="product-category">{{$product->category_name}}</p>
                                             <h3 class="product-name"><a href="#">{{ $product->name }}</a></h3>
-                                            <h4 class="product-price">MMK {{ $product->price }}<del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">MMK {{ $product->price }}</h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -135,7 +80,7 @@
     </div>
     <!-- /SECTION -->
 
-    <!-- HOT DEAL SECTION -->
+    <!-- Banner SECTION -->
     <div id="hot-deal" class="section">
         <!-- container -->
         <div class="container">
@@ -143,34 +88,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="hot-deal">
-                        <ul class="hot-deal-countdown">
-                            <li>
-                                <div>
-                                    <h3>02</h3>
-                                    <span>Days</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <h3>10</h3>
-                                    <span>Hours</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <h3>34</h3>
-                                    <span>Mins</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div>
-                                    <h3>60</h3>
-                                    <span>Secs</span>
-                                </div>
-                            </li>
-                        </ul>
-                        <h2 class="text-uppercase">hot deal this week</h2>
-                        <p>New Collection Up to 50% OFF</p>
+                        <h2 class="text-uppercase">Upgrade Your Life with Lastest Electronic</h2>
+                        <p>New Collection Up to 30% OFF</p>
                         <a class="primary-btn cta-btn" href="#">Shop now</a>
                     </div>
                 </div>
@@ -194,10 +113,9 @@
                         <h3 class="title">Top selling</h3>
                         <div class="section-nav">
                             <ul class="section-tab-nav tab-nav">
-                                <li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-                                <li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-                                <li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-                                <li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+                                @foreach ($categories as $category)
+                                <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
