@@ -109,6 +109,17 @@ ul, ol {
   color: #FFF;
 }
 
+/* wish list */
+.add-to-wishlist {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+.add-to-wishlist i {
+    color: #e74c3c;
+}
+
 /*----------------------------*\
 	Inputs
 \*----------------------------*/

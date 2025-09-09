@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use App\Models\Wishlist;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +24,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
+        // Share wishlist count to all views
+        View::composer('*', function ($view) {
+            $count = 0;
+            if (Auth::check()) {
+                $count = Wishlist::where('user_id', Auth::id())->sum('count');
+            }
+            $view->with('sharedWishlistCount', $count);
+        });
     }
 }

@@ -49,12 +49,22 @@
                                                 <i class="fa fa-star"></i>
                                             </div>
                                             <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">add to wishlist</span></button>
+                                                <form action="{{route('user#wishList')}}" method="POST" class="wishlist-form">
+                                                    @csrf
+                                                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                    <button type="submit" class="add-to-wishlist" aria-label="Toggle wishlist">
+                                                        <i class="fa {{ in_array($product->id, $wishlistProductIds ?? []) ? 'fa-heart' : 'fa-heart-o' }}"></i>
+                                                    </button>
+                                                </form>
+
                                                 <button class="add-to-compare"><i class="fa fa-exchange"></i><span
                                                         class="tooltipp">add to compare</span></button>
-                                                <button class="quick-view"><i class="fa fa-eye"></i><span
+
+                                                <form action="{{route('user#detailProduct',$product->id)}}" method="GET">
+                                                    @csrf
+                                                    <button type="submit" class="quick-view"><i class="fa fa-eye"></i><span
                                                         class="tooltipp">quick view</span></button>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="add-to-cart">

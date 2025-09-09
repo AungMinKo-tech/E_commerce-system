@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('document_cv')->nullable();
             $table->string('provider')->default('simple');
             $table->string('provider_id')->nullable();
-            $table->string('provider_token')->nullable();
+            $table->text('provider_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

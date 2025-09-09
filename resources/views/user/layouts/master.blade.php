@@ -77,10 +77,10 @@
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                     <i class="fa fa-heart-o"></i>
                                     <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
+                                    <div class="qty" id="wishlist-count">{{ isset($sharedWishlistCount) ? $sharedWishlistCount : 0 }}</div>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" class="dropdown-item">View Wishlist</a></li>
+                                    <li><a href="{{route('user#viewWishList')}}" class="dropdown-item">View Wishlist</a></li>
                                 </ul>
                             </div>
                             <!-- /Wishlist -->
@@ -313,6 +313,40 @@
     <script src="{{ asset('user/js/nouislider.min.js') }}"></script>
     <script src="{{ asset('user/js/jquery.zoom.min.js') }}"></script>
     <script src="{{ asset('user/js/main.js') }}"></script>
+
+    <script>
+        $(document).on('submit', '.wishlist-form', function (e) {
+            e.preventDefault();
+            const $form = $(this);
+            const url = $form.attr('action');
+            const data = $form.serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': $form.find('input[name="_token"]').val()
+                },
+                success: function (res) {
+                    if (res && typeof res.count !== 'undefined') {
+                        $('#wishlist-count').text(res.count);
+                    }
+                    // toggle heart icon fill
+                    const $icon = $form.find('.add-to-wishlist i');
+                    if (res.status === 'added') {
+                        $icon.removeClass('fa-heart-o').addClass('fa-heart');
+                    } else if (res.status === 'removed') {
+                        $icon.removeClass('fa-heart').addClass('fa-heart-o');
+                    }
+                },
+                error: function () {
+                    console.log('error');
+
+                }
+            });
+        });
+    </script>
 
 </body>
 {{--
