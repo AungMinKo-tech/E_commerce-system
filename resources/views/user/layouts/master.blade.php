@@ -73,58 +73,24 @@
                     <div class="col-md-4">
                         <div class="header-ctn">
                             <!-- Wishlist -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <div class=>
+                                <a href="{{route('user#viewWishList')}}">
                                     <i class="fa fa-heart-o"></i>
                                     <span>Your Wishlist</span>
-                                    <div class="qty" id="wishlist-count">{{ isset($sharedWishlistCount) ? $sharedWishlistCount : 0 }}</div>
+                                    <div class="qty" id="wishlist-count">
+                                        {{ isset($sharedWishlistCount) ? $sharedWishlistCount : 0 }}
+                                    </div>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{route('user#viewWishList')}}" class="dropdown-item">View Wishlist</a></li>
-                                </ul>
                             </div>
                             <!-- /Wishlist -->
 
                             <!-- Cart -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <div class="">
+                                <a href="{{route('user#cart')}}">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
-                                    <div class="qty">3</div>
+                                    <div class="qty">{{ isset($sharedCartCount) ? $sharedCartCount : 0 }}</div>
                                 </a>
-                                <div class="dropdown-menu cart-dropdown" style="padding: 0;">
-                                    <div class="cart-list">
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product01.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-
-                                        <div class="product-widget">
-                                            <div class="product-img">
-                                                <img src="./img/product02.png" alt="">
-                                            </div>
-                                            <div class="product-body">
-                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                            </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="cart-summary" style="padding: 10px;">
-                                        <small>3 Item(s) selected</small>
-                                        <h5>SUBTOTAL: $2940.00</h5>
-                                    </div>
-                                    <div class="cart-btns" style="padding: 10px;">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
                             </div>
                             <!-- /Cart -->
 
@@ -149,7 +115,8 @@
                                         </a>
                                     </li>
                                     <li class="border-bottom">
-                                        <a href="{{route('user#changePasswordPage')}}" class="dropdown-item py-3 px-4 d-flex align-items-center"
+                                        <a href="{{route('user#changePasswordPage')}}"
+                                            class="dropdown-item py-3 px-4 d-flex align-items-center"
                                             style="font-weight: 500;">
                                             <i class="fa fa-lock mr-2 text-warning"></i>
                                             Change Password
@@ -189,7 +156,7 @@
             <div id="responsive-nav">
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href="{{ route('user#home') }}">Home</a></li>
                     <li><a href="#">Categories</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Map</a></li>

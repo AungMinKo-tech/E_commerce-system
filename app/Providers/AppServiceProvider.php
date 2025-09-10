@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Cart;
+use App\Models\Wishlist;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use App\Models\Wishlist;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,15 @@ class AppServiceProvider extends ServiceProvider
                 $count = Wishlist::where('user_id', Auth::id())->sum('count');
             }
             $view->with('sharedWishlistCount', $count);
+        });
+
+        // Share cart data to all views
+        View::composer('*', function ($view) {
+            $cartCount = 0;
+            if (Auth::check()) {
+                $cartCount = Cart::where('user_id', Auth::id())->sum('qty');
+            }
+            $view->with('sharedCartCount', $cartCount);
         });
     }
 }

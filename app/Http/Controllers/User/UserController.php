@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Wishlist;
@@ -89,12 +90,38 @@ class UserController extends Controller
                 ->where('products.id', $id)
                 ->first();
 
-        // $relatedProducts = Product::select('products.*', 'categories.name as category_name')
-        //         ->leftJoin('categories','products.category_id','=', 'categories.id')
-        //         ->where('products.category_id', $product->category_id)
-        //         ->where('products.id', '!=', $id)
-        //         ->get();
+        $colors = Product::select('colors.name as color_name', 'product_colors.*')
+                ->leftJoin('product_colors','product_colors.product_id','=','products.id')
+                ->leftJoin('colors','product_colors.color_id','=','colors.id')
+                ->where('products.id', $id)
+                ->get();
 
-        return view('user.product.details', compact('product', 'relatedProducts'));
+        $relatedProducts = Product::select('products.*', 'categories.name as category_name')
+                ->leftJoin('categories','products.category_id','=', 'categories.id')
+                ->where('products.category_id', $product->category_id)
+                ->where('products.id', '!=', $id)
+                ->get();
+
+                // dd($colors->toArray());
+                // dd($product->toArray());
+
+        return view('user.product.details', compact('product', 'relatedProducts', 'colors'));
+    }
+
+    //direct cart page
+    public function cartPage(){
+        $carts = Cart::select('carts.*', 'colors.name as color_name', 'products.name as product_name', 'products.price', 'products.photo')
+                ->leftJoin('products','carts.product_id','=','products.id')
+                ->leftJoin('product_colors','products.id','=','product_colors.product_id')
+                ->leftJoin('colors','product_colors.color_id','=','colors.id')
+                ->where('carts.user_id', Auth::user()->id)
+                ->get();
+
+        return view('user.cart.cart', compact('carts'));
+    }
+
+    //add to cart
+    public function addToCart(Request $request){
+        dd($request->all());
     }
 }
