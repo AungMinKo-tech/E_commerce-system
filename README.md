@@ -11,3 +11,6 @@
 
 ## Admin Dashboard
 <img src="public/default/admin_dashboard.png" width="600"> 
+
+## User Dashboard
+<img src="public/default/client.png" width="600">
