@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="cart-items">
-                        <table class="table">
+                        <table class="table" id="productTable">
                             <thead>
                                 <tr>
                                     <th colspan="2">Product</th>
@@ -23,21 +23,22 @@
                                 @foreach ($carts as $item)
                                     <tr>
                                         <td style="width: 100px;">
-                                            <img src="{{ asset('product_image/'. $item->photo) }}" alt="Product Image" style="width: 100%;">
+                                            <img src="{{ asset('product_image/' . $item->photo) }}" alt="Product Image"
+                                                style="width: 100%;">
                                         </td>
                                         <td>
                                             <a href="#"><strong>{{$item->product_name}}</strong></a>
                                             <p class="small">Color: {{ $item->color_name }}</p>
                                         </td>
-                                        <td>{{ $product->price }}</td>
+                                        <td class="price">{{ $item->price }} MMK</td>
                                         <td>
                                             <div class="input-number" style="width: 120px;">
-                                                <input type="number" value="{{ $item->qty }}">
+                                                <input type="number" class="qty" value="{{ $item->qty }}">
                                                 <span class="qty-up">+</span>
                                                 <span class="qty-down">-</span>
                                             </div>
                                         </td>
-                                        <td>{{ $item->price * $item->qty }}</td>
+                                        <td class="total">{{ $item->price * $item->qty }} MMK</td>
                                         <td class="text-center">
                                             <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                         </td>
@@ -62,15 +63,15 @@
                             <tbody>
                                 <tr>
                                     <th>Subtotal</th>
-                                    <td>$1880.00</td>
+                                    <td id="subtotal">{{ $totalPrice }} MMK</td>
                                 </tr>
                                 <tr>
                                     <th>Shipping</th>
-                                    <td>Free Shipping</td>
+                                    <td>3500 MMK</td>
                                 </tr>
                                 <tr>
                                     <th><strong>Total</strong></th>
-                                    <td><strong>$1880.00</strong></td>
+                                    <td><strong id="finalTotal">{{ $totalPrice + 3500 }} MMK</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -85,3 +86,36 @@
     </div>
     <!-- /SECTION -->
 @endsection
+{{--
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $(document).ready(function () {
+        function countCalculation(event) {
+            var parentNode = $(event).closest("tr");
+            var price = parseFloat(parentNode.find(".price").text().replace(" MMK", ""));
+            var qty = parseInt(parentNode.find(".qty").val());
+
+            parentNode.find(".total").text((price * qty) + " MMK");
+        }
+
+        function finalTotalCalculation() {
+            var total = 0;
+
+            $("#productTable tbody tr").each(function (index, item) {
+                total += parseFloat($(item).find(".total").text().replace(" MMK", ""));
+            });
+
+            $("#subtotal").html(total + " MMK");
+            $("#finalTotal").html((total + 3500) + " MMK");
+        }
+
+        $('.qty-down, .qty-up').click(function () {
+            countCalculation(this);
+            finalTotalCalculation();
+        });
+    });
+</script>

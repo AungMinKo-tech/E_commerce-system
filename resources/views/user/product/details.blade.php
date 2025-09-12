@@ -7,6 +7,11 @@
         <div class="container">
             <!-- row -->
             <div class="row">
+                <div class="col-md-12">
+                    <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+                        <a href="{{ url()->previous() }}" class="primary-btn"><i class="fa fa-arrow-left"></i> Back</a>
+                    </div>
+                </div>
                 <!-- Product main img -->
                 <div class="col-md-5">
                     <div id="product-main-img">
@@ -63,7 +68,7 @@
                                     Color
                                     <select class="input-select" name="color_id">
                                         @foreach ($colors as $color)
-                                            <option value="{{ $color->color_name }}">{{ $color->color_name }}</option>
+                                            <option value="{{ $color->color_id }}">{{ $color->color_name }}</option>
                                         @endforeach
                                     </select>
                                 </label>

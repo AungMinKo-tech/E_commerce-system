@@ -6,9 +6,11 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Wishlist;
+use App\Models\ProductColor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -83,17 +85,14 @@ class UserController extends Controller
 
     //view details product
     public function detailProduct($id){
-        $product = Product::select('products.*', 'categories.name as category_name', 'colors.name as color_name', 'product_colors.*')
+        $product = Product::select('products.*', 'categories.name as category_name')
                 ->leftJoin('categories','products.category_id','=', 'categories.id')
-                ->leftJoin('product_colors','products.id','=','product_colors.product_id')
-                ->leftJoin('colors','product_colors.color_id','=','colors.id')
                 ->where('products.id', $id)
                 ->first();
 
-        $colors = Product::select('colors.name as color_name', 'product_colors.*')
-                ->leftJoin('product_colors','product_colors.product_id','=','products.id')
+        $colors = ProductColor::select('colors.id as color_id', 'colors.name as color_name', 'product_colors.stock')
                 ->leftJoin('colors','product_colors.color_id','=','colors.id')
-                ->where('products.id', $id)
+                ->where('product_colors.product_id', $id)
                 ->get();
 
         $relatedProducts = Product::select('products.*', 'categories.name as category_name')
@@ -102,9 +101,6 @@ class UserController extends Controller
                 ->where('products.id', '!=', $id)
                 ->get();
 
-                // dd($colors->toArray());
-                // dd($product->toArray());
-
         return view('user.product.details', compact('product', 'relatedProducts', 'colors'));
     }
 
@@ -112,16 +108,49 @@ class UserController extends Controller
     public function cartPage(){
         $carts = Cart::select('carts.*', 'colors.name as color_name', 'products.name as product_name', 'products.price', 'products.photo')
                 ->leftJoin('products','carts.product_id','=','products.id')
-                ->leftJoin('product_colors','products.id','=','product_colors.product_id')
-                ->leftJoin('colors','product_colors.color_id','=','colors.id')
+                ->leftJoin('colors','carts.color_id','=','colors.id')
                 ->where('carts.user_id', Auth::user()->id)
                 ->get();
 
-        return view('user.cart.cart', compact('carts'));
+        $totalPrice = 0;
+        foreach ($carts as $cart) {
+            $totalPrice += $cart->price * $cart->qty;
+        }
+
+        return view('user.cart.cart', compact('carts', 'totalPrice'));
     }
 
     //add to cart
     public function addToCart(Request $request){
-        dd($request->all());
+        $productColor = ProductColor::where('product_id', $request->product_id)
+                                    ->where('color_id', $request->color_id)
+                                    ->first();
+
+        if(!$productColor || $productColor->stock < $request->qty){
+            Alert::error('Fail', 'Product stock not enough');
+            return back();
+        }
+
+        $cartItem = Cart::where('user_id', $request->user_id)
+                        ->where('product_id', $request->product_id)
+                        ->where('color_id', $request->color_id)
+                        ->first();
+
+        if ($cartItem) {
+            $cartItem->qty += $request->qty;
+            $cartItem->save();
+        } else {
+            // Create a new cart item
+            Cart::create([
+                'user_id' => $request->user_id,
+                'product_id' => $request->product_id,
+                'color_id' => $request->color_id,
+                'qty' => $request->qty
+            ]);
+        }
+
+        Alert::success('Success', 'Product added to cart');
+
+        return back();
     }
 }

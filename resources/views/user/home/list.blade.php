@@ -15,7 +15,7 @@
                         <div class="section-nav">
                             <ul class="section-tab-nav tab-nav">
                                 @foreach ($categories as $category)
-                                <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -33,46 +33,47 @@
 
                                     @foreach ($products as $product)
                                         <!-- product -->
-                                    <div class="product">
-                                        <div class="product-img">
-                                            <img src="{{ asset('product_image/'. $product->photo) }}">
-                                        </div>
-                                        <div class="product-body">
-                                            <p class="product-category">{{$product->category_name}}</p>
-                                            <h3 class="product-name"><a href="#">{{ $product->name }}</a></h3>
-                                            <h4 class="product-price">MMK {{ $product->price }}</h4>
-                                            <div class="product-rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                        <div class="product">
+                                            <div class="product-img">
+                                                <img src="{{ asset('product_image/' . $product->photo) }}">
                                             </div>
-                                            <div class="product-btns">
-                                                <form action="{{route('user#wishList')}}" method="POST" class="wishlist-form">
-                                                    @csrf
-                                                    <input type="hidden" name="product_id" value="{{$product->id}}">
-                                                    <button type="submit" class="add-to-wishlist" aria-label="Toggle wishlist">
-                                                        <i class="fa {{ in_array($product->id, $wishlistProductIds ?? []) ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                                    </button>
-                                                </form>
+                                            <div class="product-body">
+                                                <p class="product-category">{{$product->category_name}}</p>
+                                                <h3 class="product-name"><a href="#">{{ $product->name }}</a></h3>
+                                                <h4 class="product-price">MMK {{ $product->price }}</h4>
+                                                <div class="product-rating">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                                <div class="product-btns">
+                                                    <form action="{{route('user#wishList')}}" method="POST"
+                                                        class="wishlist-form">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                        <button type="submit" class="add-to-wishlist"
+                                                            aria-label="Toggle wishlist">
+                                                            <i
+                                                                class="fa {{ in_array($product->id, $wishlistProductIds ?? []) ? 'fa-heart' : 'fa-heart-o' }}"></i>
+                                                        </button>
+                                                    </form>
 
-                                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span
-                                                        class="tooltipp">add to compare</span></button>
+                                                    <button class="add-to-compare"><i class="fa fa-exchange"></i><span
+                                                            class="tooltipp">add to compare</span></button>
 
-                                                <form action="{{route('user#detailProduct',$product->id)}}" method="GET">
-                                                    @csrf
-                                                    <button type="submit" class="quick-view"><i class="fa fa-eye"></i><span
-                                                        class="tooltipp">quick view</span></button>
-                                                </form>
+                                                </div>
                                             </div>
+                                            <form action="{{route('user#detailProduct', $product->id)}}" method="GET">
+                                                @csrf
+                                                <div class="add-to-cart">
+                                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
+                                                        cart</button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="add-to-cart">
-                                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
-                                                cart</button>
-                                        </div>
-                                    </div>
-                                    <!-- /product -->
+                                        <!-- /product -->
                                     @endforeach
 
                                 </div>
@@ -124,7 +125,7 @@
                         <div class="section-nav">
                             <ul class="section-tab-nav tab-nav">
                                 @foreach ($categories as $category)
-                                <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -151,8 +152,8 @@
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price">$980.00 <del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del>
+                                            </h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -187,8 +188,8 @@
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price">$980.00 <del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del>
+                                            </h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -223,8 +224,8 @@
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price">$980.00 <del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del>
+                                            </h4>
                                             <div class="product-rating">
                                             </div>
                                             <div class="product-btns">
@@ -251,8 +252,8 @@
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price">$980.00 <del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del>
+                                            </h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -284,8 +285,8 @@
                                         <div class="product-body">
                                             <p class="product-category">Category</p>
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price">$980.00 <del
-                                                    class="product-old-price">$990.00</del></h4>
+                                            <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del>
+                                            </h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>

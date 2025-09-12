@@ -22,4 +22,7 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     //cart
     Route::get('cart', [UserController::class,'cartPage'])->name('user#cart');
     Route::post('addToCart', [UserController::class,'addToCart'])->name('user#addToCart');
+
+    //checkout
+    Route::get('checkout', [UserController::class,'checkOutPage'])->name('user#checkout');
 });
