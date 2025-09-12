@@ -40,7 +40,7 @@
                                         </td>
                                         <td class="total">{{ $item->price * $item->qty }} MMK</td>
                                         <td class="text-center">
-                                            <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            <button class="btn btn-danger btn-sm delete-btn"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -116,6 +116,10 @@
         $('.qty-down, .qty-up').click(function () {
             countCalculation(this);
             finalTotalCalculation();
+        });
+
+        $('.delete-btn').click(function(){
+
         });
     });
 </script>

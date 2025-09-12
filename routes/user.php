@@ -25,4 +25,8 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
 
     //checkout
     Route::get('checkout', [UserController::class,'checkOutPage'])->name('user#checkout');
+
+    //comment
+    Route::post('addComment', [UserController::class,'addComment'])->name('user#addComment');
+
 });

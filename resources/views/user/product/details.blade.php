@@ -111,7 +111,7 @@
                         <ul class="tab-nav">
                             <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
                             <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                            <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+                            <li><a data-toggle="tab" href="#tab3">Reviews ({{$comments->count()}})</a></li>
                         </ul>
                         <!-- /product tab nav -->
 
@@ -121,12 +121,7 @@
                             <div id="tab1" class="tab-pane fade in active">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                            fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                            culpa qui officia deserunt mollit anim id est laborum.</p>
+                                        <p>{{ $product->description }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -238,57 +233,33 @@
                                     <div class="col-md-6">
                                         <div id="reviews">
                                             <ul class="reviews">
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
+                                                @foreach ($comments as $comment)
+                                                    <li>
+                                                        <div class="review-heading">
+                                                            <h5 class="name">{{ $comment->name }}</h5>
+                                                            <p class="date">{{$comment->created_at->format('d-m-Y')}}</p>
+                                                            <div class="review-rating">
+                                                                @if ($comment->rating_count == 0)
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                @else
+                                                                    @for ($i = 0; $i < $comment->rating_count; $i++)
+                                                                        <i class="fa fa-star"></i>
+                                                                    @endfor
+                                                                    @for ($j = $comment->rating_count; $j < 5; $j++)
+                                                                        <i class="fa fa-star-o empty"></i>
+                                                                    @endfor
+                                                                @endif
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                            eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
+                                                        <div class="review-body">
+                                                            <p>{{$comment->message}}</p>
                                                         </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                            eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">John</h5>
-                                                        <p class="date">27 DEC 2018, 8:0 PM</p>
-                                                        <div class="review-rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o empty"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                            eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                @endforeach
                                             </ul>
                                             <ul class="reviews-pagination">
                                                 <li class="active">1</li>
@@ -304,10 +275,15 @@
                                     <!-- Review Form -->
                                     <div class="col-md-3">
                                         <div id="review-form">
-                                            <form class="review-form">
-                                                <input class="input" type="text" placeholder="Your Name">
-                                                <input class="input" type="email" placeholder="Your Email">
-                                                <textarea class="input" placeholder="Your Review"></textarea>
+                                            <form class="review-form" action="{{route('user#addComment')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{$product->id}}">
+                                                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                                                <input class="input" type="text" placeholder="{{Auth::user()->name}}"
+                                                    disabled>
+                                                <input class="input" type="email" placeholder="Your Email" required>
+                                                <textarea class="input" placeholder="Your Review" name="message"
+                                                    required></textarea>
                                                 <div class="input-rating">
                                                     <span>Your Rating: </span>
                                                     <div class="stars">
@@ -323,7 +299,7 @@
                                                             for="star1"></label>
                                                     </div>
                                                 </div>
-                                                <button class="primary-btn">Submit</button>
+                                                <button class="primary-btn" type="submit">Submit</button>
                                             </form>
                                         </div>
                                     </div>
