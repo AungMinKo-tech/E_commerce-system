@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
+use App\Models\Rating;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Rating;
 use App\Models\Wishlist;
 use App\Models\ProductColor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -116,7 +117,10 @@ class UserController extends Controller
             ->orderBy('comments.created_at', 'desc')
             ->get();
 
-        return view('user.product.details', compact('product', 'relatedProducts', 'colors', 'comments'));
+        $avgRating = Rating::where('product_id', $id)->avg('count');
+        $avgRating = $avgRating ? round($avgRating, 1) : 0;
+
+        return view('user.product.details', compact('product', 'relatedProducts', 'colors', 'comments', 'avgRating'));
     }
 
     //comment

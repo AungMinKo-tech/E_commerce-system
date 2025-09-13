@@ -29,7 +29,7 @@
                                         <div class="row g-3">
                                             <div class="col-md-12">
                                                 <label for="productName" class="form-label fw-semibold">Product Name</label>
-                                                <input type="text" id="productName" class="form-control" placeholder="Enter product name" name="name"/>
+                                                <input type="text" id="productName" class="form-control" placeholder="Enter product name" name="name" required/>
                                             </div>
 
                                             <div class="col-md-6">
@@ -46,7 +46,7 @@
                                                 <label for="price" class="form-label fw-semibold">Price</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">MMK</span>
-                                                    <input type="number" id="price" class="form-control" placeholder="0.00" step="0.01" min="0" name="price" />
+                                                    <input type="number" id="price" class="form-control" placeholder="0.00" step="0.01" min="0" name="price" required/>
                                                 </div>
                                             </div>
 
@@ -61,7 +61,7 @@
                                             <template id="variantRowTemplate">
                                                 <div class="row g-2 align-items-center" data-variant-index="{index}">
                                                     <div class="col-md-4">
-                                                        <input type="number" class="form-control variant-stock" placeholder="Stock" min="0" name="stocks[]"/>
+                                                        <input type="number" class="form-control variant-stock" placeholder="Stock" min="0" name="stocks[]" required/>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="d-flex gap-2 align-items-center">
@@ -86,7 +86,12 @@
 
                                             <div class="col-12">
                                                 <label for="description" class="form-label fw-semibold">Description</label>
-                                                <textarea id="description" class="form-control" rows="5" placeholder="Write a short description..." name="description"></textarea>
+                                                <textarea id="description" class="form-control" rows="5" placeholder="Write a short description..." name="description" required></textarea>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <label for="detail" class="form-label fw-semibold">detail</label>
+                                                <textarea id="detail" class="form-control" rows="5" placeholder="Write Detail Product..." name="detail" required></textarea>
                                             </div>
                                         </div>
                                     </div>

@@ -17,7 +17,7 @@ class ProductController extends Controller
     //redirect product list page
     public function listProduct($action = "default")
     {
-        $products = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at')
+        $products = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'products.detail', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('product_colors', 'products.id', '=', 'product_colors.product_id')
             ->leftJoin('colors', 'product_colors.color_id', '=', 'colors.id')
@@ -187,6 +187,7 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'price' => $request->price,
             'description' => $request->description,
+            'detail' => $request->detail,
         ];
     }
 
@@ -197,6 +198,7 @@ class ProductController extends Controller
             'name' => 'required|min:2|max:30|unique:products,name,' . $request->product_id,
             'price' => 'required|numeric',
             'description' => 'required|string',
+            'detail' => 'required|string',
             'category_id' => 'required|integer|exists:categories,id',
             'colors_id' => 'required|array|min:1',
             'colors_id.*' => 'integer|exists:colors,id',
