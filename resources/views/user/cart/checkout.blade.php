@@ -107,20 +107,58 @@
                             </div>
 
                             <div class="order-col">
-                                <div><strong>Final Total</strong></div>
-                                <div><strong>{{ $tmpOrder[0]['final_total']}} MMK</strong></div>
+                                <div class="me-3"><strong>Voucher Code</strong></div>
+                                <form action="{{route('user#applyVoucher')}}" class="form-inline" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="totalAmount" value="{{ $tmpOrder[0]['final_total']}}">
+                                    <input type="text" class="form-control" name="voucher" placeholder="Enter Voucher Code">
+                                    <button type="submit" class="btn btn-danger">Apply</button>
+                                </form>
                             </div>
+
+                            @if (isset($finalAmount))
+                                <div class="order-col">
+                                    <div><strong>Final Total</strong></div>
+                                    <div>
+                                        <h5 class="product-price">{{ $tmpOrder[0]['final_total']}} MMK <del class="product-old-price" {{ $finalAmount }}></del></h5>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="order-col">
+                                    <div><strong>Final Total</strong></div>
+                                    <div><h5>{{ $tmpOrder[0]['final_total']}} MMK</h5></div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="payment-method">
+                        <div class="text-center">
+                            <div><strong>Payment Info</strong></div>
                         </div>
 
+                        <div class="form-group mt-3 mb-2">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter Your Name">
+                        </div>
 
-                    </div>
-                    <div class="payment-method">
-                        <select class="form-control" name="payment" id="payment">
+                        <div class="form-group mb-2">
+                            <label for="transaction_id">Transaction ID</label>
+                            <input type="text" id="transaction_id" name="transaction_id" class="form-control"
+                                placeholder="Enter Your Name">
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="amount">Paid Amount</label>
+                            <input type="text" id="amount" name="amount" class="form-control"
+                                value="{{ $tmpOrder[0]['final_total'] }} MMK" readonly>
+                        </div>
+
+                        <select class="form-control mt-2" name="payment" id="payment">
                             <option value="">Choose Payment Method</option>
                             @foreach ($payments as $payment)
                                 <option value="{{ $payment->id }}">{{ $payment->account_type }}</option>
                             @endforeach
-
                         </select>
 
                     </div>

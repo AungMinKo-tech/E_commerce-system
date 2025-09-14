@@ -8,6 +8,7 @@ use App\Models\Rating;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Voucher;
 use App\Models\Wishlist;
 use App\Models\ProductColor;
 use Illuminate\Http\Request;
@@ -254,5 +255,39 @@ class UserController extends Controller
         $tmpOrder = Session::get('tmpCart');
 
         return view('user.cart.checkout', compact('payments', 'tmpOrder'));
+    }
+
+    //apply voucher
+    public function applyVoucher(Request $request){
+        // dd($request->all());
+        $voucherCode = Voucher::where('voucher_code', $request->voucher)->first();
+
+        if(!$voucherCode){
+            Alert::error('Error', 'Voucher code is invalid');
+            return back();
+        }
+
+        //check expiry date
+        if($voucherCode->end_date < now()){
+            Alert::error('Error', 'Voucher code has expired');
+            return back();
+        }
+
+        //check usage limit
+        if($voucherCode->max_usage <= 0){
+            Alert::error('Error', 'Voucher code usage limit reached');
+            return back();
+        }
+
+        $finalAmount = $request->totalAmount - $voucherCode->voucher_price;
+
+        Voucher::where('id', $voucherCode->id)->decrement('max_usage');
+        Voucher::where('id', $voucherCode->id)->increment('use_count');
+
+        Alert::success('Success', 'Voucher applied successfully');
+
+        return back()->with([
+            'finalAmount' => $finalAmount
+        ]);
     }
 }

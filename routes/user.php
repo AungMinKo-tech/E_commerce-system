@@ -30,6 +30,9 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     //checkout
     Route::get('checkout', [UserController::class,'checkOutPage'])->name('user#checkout');
 
+    //voucher
+    Route::post('applyVoucher', [UserController::class,'applyVoucher'])->name('user#applyVoucher');
+
     //comment
     Route::post('addComment', [UserController::class,'addComment'])->name('user#addComment');
 
