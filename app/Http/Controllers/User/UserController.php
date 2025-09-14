@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
+use App\Models\Payment;
 use App\Models\Rating;
 use App\Models\Comment;
 use App\Models\Product;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
@@ -112,7 +114,7 @@ class UserController extends Controller
             ->leftJoin('users', 'users.id', 'comments.user_id')
             ->leftJoin('ratings', function ($join) {
                 $join->on('ratings.user_id', '=', 'comments.user_id')
-                     ->on('ratings.product_id', '=', 'comments.product_id');
+                    ->on('ratings.product_id', '=', 'comments.product_id');
             })
             ->orderBy('comments.created_at', 'desc')
             ->get();
@@ -159,7 +161,7 @@ class UserController extends Controller
     //direct cart page
     public function cartPage()
     {
-        $carts = Cart::select('carts.*', 'colors.name as color_name', 'products.name as product_name', 'products.price', 'products.photo')
+        $carts = Cart::select('carts.*', 'colors.name as color_name', 'products.name as product_name', 'products.price', 'products.photo', 'products.id as product_id')
             ->leftJoin('products', 'carts.product_id', '=', 'products.id')
             ->leftJoin('colors', 'carts.color_id', '=', 'colors.id')
             ->where('carts.user_id', Auth::user()->id)
@@ -206,5 +208,51 @@ class UserController extends Controller
         Alert::success('Success', 'Product added to cart');
 
         return back();
+    }
+    //cart delete
+    public function cartDelete(Request $request)
+    {
+        // dd($request->all());
+        $cartId = $request['cartId'];
+
+        Cart::where('id', $cartId)->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'cart success'
+        ], 200);
+    }
+
+    //orderlist tmp
+    public function tmpOrder(Request $request){
+        $tmpOrder = [];
+
+        foreach($request->all() as $item){
+            array_push($tmpOrder, [
+                'user_id' => $item['userId'],
+                'product_id' => $item['productId'],
+                'product_name' => $item['productName'],
+                'color_id' => $item['colorId'],
+                'qty' => $item['qty'],
+                'price' => $item['price'],
+                'status' => $item['status'],
+                'order_code' => $item['orderCode'],
+                'final_total' => $item['finalAmt'],
+            ]);
+        }
+        Session::put('tmpCart', $tmpOrder);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'tmp order success'
+        ], 200);
+    }
+
+    //direct checkout page
+    public function checkOutPage(){
+        $payments = Payment::select('id', 'account_number', 'account_name', 'account_type')->get();
+        $tmpOrder = Session::get('tmpCart');
+
+        return view('user.cart.checkout', compact('payments', 'tmpOrder'));
     }
 }

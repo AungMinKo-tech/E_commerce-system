@@ -40,7 +40,14 @@
                                         </td>
                                         <td class="total">{{ $item->price * $item->qty }} MMK</td>
                                         <td class="text-center">
-                                            <button class="btn btn-danger btn-sm delete-btn"><i class="fa fa-trash"></i></button>
+                                            <input type="hidden" name="cartId" class="cartId" value="{{$item->id}}">
+                                            <input type="hidden" class="userId" value="{{Auth::user()->id}}">
+                                            <input type="hidden" class="productId" value="{{$item->product_id}}">
+                                            <input type="hidden" name="colorId" class="colorId" value="{{$item->color_id}}">
+                                            <input type="hidden" name="productName" class="productName" value="{{$item->product_name}}">
+                                            <input type="hidden" name="price" class="price" value="{{$item->price}}">
+                                            <button class="btn btn-danger btn-sm delete-btn"><i
+                                                    class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -75,8 +82,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <a href="#" class="btn btn-success btn-block">Proceed to Checkout <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <button type="button"
+                            class="btn btn-success btn-block checkout @if (count($carts) == 0) disabled @endif">Proceed to
+                            Checkout <i class="fa fa-arrow-circle-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -118,8 +126,71 @@
             finalTotalCalculation();
         });
 
-        $('.delete-btn').click(function(){
+        $('.delete-btn').click(function () {
+            parentNode = $(this).parents("tr");
 
+            cartId = parentNode.find(".cartId").val();
+
+            deleteData = {
+                'cartId': cartId,
+            };
+
+            $.ajax({
+                type: "get",
+                url: "/user/cartDelete",
+                data: deleteData,
+                dataType: "json",
+                success: function (res) {
+                    res.status == 'success' ? location.reload() : '';
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $('.checkout').click(function () {
+            orderList = [];
+            userId = $('.userId').val();
+            orderCode = "ELE-" + Math.floor(Math.random() * 1000000000);
+
+            $("#productTable tbody tr").each(function (index, row) {
+
+                productId = $(row).find(".productId").val();
+                qty = $(row).find(".qty").val();
+                colorId = $(row).find(".colorId").val();
+                productName = $(row).find(".productName").val();
+                price = parseFloat($(row).find("td.price").text().replace(" MMK", ""));
+                finalTotal = $("#finalTotal").text().replace(" MMK", "");
+
+                orderList.push({
+                    'productId': productId,
+                    'productName': productName,
+                    'userId': userId,
+                    'colorId': colorId,
+                    'price': price,
+                    'qty': qty,
+                    'status': 0,
+                    'orderCode': orderCode,
+                    'finalAmt': finalTotal,
+                })
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/user/tmpOrder",
+                data: Object.assign({},orderList),
+                dataType: "json",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function (res) {
+                    res.status == 'success' ? location.href = "/user/checkout" : location.reload();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         });
     });
 </script>
