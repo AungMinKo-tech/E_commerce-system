@@ -5,7 +5,8 @@
     <div class="section">
         <!-- container -->
         <div class="container">
-            <form action="">
+            <form action="{{route('user#orderCreate')}}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <!-- row -->
                 <div class="row">
                     <div class="col-md-7">
@@ -50,42 +51,6 @@
                         </div>
                         <!-- /Billing Details -->
 
-                        <!-- Shiping Details -->
-                        <div class="shiping-details">
-                            <div class="section-title">
-                                <h3 class="title">Shiping address</h3>
-                            </div>
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="shiping-address">
-                                <label for="shiping-address">
-                                    <span></span>
-                                    Ship to a diffrent address?
-                                </label>
-                                <div class="caption">
-                                    <div class="form-group">
-                                        <input class="input" type="text" name="ship_name" placeholder="Name">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="input" type="email" name="ship_email" placeholder="Email">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="input" type="text" name="ship_address" placeholder="Address">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="input" type="text" name="ship_city" placeholder="City">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="input" type="tel" name="ship_phone" placeholder="Phone">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Shiping Details -->
-
                         <!-- Order notes -->
                         <div class="order-notes">
                             <textarea class="input" name="order_note" placeholder="Order Notes"></textarea>
@@ -124,9 +89,11 @@
                                 <div class="order-col d-flex align-items-center gap-2 flex-nowrap">
                                     <div class="flex-shrink-0"><strong>Voucher Code</strong></div>
                                     <input type="text" class="form-control flex-grow-1" name="voucher"
-                                        placeholder="Enter Voucher Code">
-                                        <span id="message"></span><br>
-                                    <button type="button" class="btn btn-danger apply">Apply</button>
+                                        placeholder="Enter Voucher Code" id="voucherInput" @if ($voucherUsed)
+                                        readonly @endif value="{{ $voucherCode ?? old('voucher') }}">
+                                    <span id="message"></span><br>
+                                    <button type="button" class="btn btn-danger apply" id="applyBtn" @if ($voucherUsed)
+                                    disabled @endif>Apply</button>
                                 </div>
 
                                 @if (isset($discount))
@@ -222,6 +189,13 @@
                 success: function (response) {
                     if (response.status == 'success') {
                         $('#message').text(response.message).css('color', 'green');
+                        // Disable voucher input and button after successful application
+                        $('#voucherInput').prop('disabled', true);
+                        $('#applyBtn').prop('disabled', true);
+                        // Reload the page to show updated total with discount
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
                     } else {
                         $('#message').text(response.message).css('color', 'red');
                     }

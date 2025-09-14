@@ -36,4 +36,7 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     //comment
     Route::post('addComment', [UserController::class,'addComment'])->name('user#addComment');
 
+    //order
+    Route::get('orderPage', [UserController::class,'orderPage'])->name('user#orderPage');
+    Route::post('orderCreate', [UserController::class,'orderCreate'])->name('user#orderCreate');
 });

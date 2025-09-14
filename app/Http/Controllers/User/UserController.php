@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
-use App\Models\Payment;
+use App\Models\Order;
 use App\Models\Rating;
 use App\Models\Comment;
+use App\Models\Payment;
 use App\Models\Product;
-use App\Models\Category;
 use App\Models\Voucher;
+use App\Models\Category;
 use App\Models\Wishlist;
 use App\Models\ProductColor;
 use Illuminate\Http\Request;
@@ -254,13 +255,16 @@ class UserController extends Controller
         $payments = Payment::select('id', 'account_number', 'account_name', 'account_type')->get();
         $tmpOrder = Session::get('tmpCart');
         $discount = Session::get('discount');
+        $voucherUsed = Session::get('voucher_used');
+        $voucherCode = Session::get('voucher_code');
 
-        return view('user.cart.checkout', compact('payments', 'tmpOrder', 'discount'));
+        return view('user.cart.checkout', compact('payments', 'tmpOrder', 'discount', 'voucherUsed', 'voucherCode'));
     }
 
     //apply voucher
     public function applyVoucher(Request $request){
         // dd($request->all());
+        $userId = Auth::user()->id; //login user id
         $voucherCode = Voucher::where('voucher_code', $request->voucher)->first();
 
         if(!$voucherCode){
@@ -286,6 +290,15 @@ class UserController extends Controller
             ], 400);
         }
 
+        //already used this voucher
+        $alreadyUsed = Order::where('user_id', $userId)->where('voucher_code', $voucherCode)->exists();
+        if($alreadyUsed){
+            return response()->json([
+                'status' => 'error',
+                'message'=> 'You have already uesd this voucher'
+            ]);
+        }
+
         $finalAmount = $request->totalAmount - $voucherCode->voucher_price;
 
         // Ensure final amount doesn't go below 0
@@ -295,11 +308,23 @@ class UserController extends Controller
 
         Session::put(['discount' => $finalAmount]);
         Session::put(['voucher_id' => $voucherCode->id]);
+        Session::put(['voucher_code' => $voucherCode->voucher_code]);
+        Session::put(['voucher_used' => true]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Voucher applied successfully',
             'finalAmount' => $finalAmount
         ], 200);
+    }
+
+    //redirect order page
+    public function orderPage(){
+        return view('user.order.list');
+    }
+
+    //create order
+    public function orderCreate(Request $request){
+        dd($request->all());
     }
 }
