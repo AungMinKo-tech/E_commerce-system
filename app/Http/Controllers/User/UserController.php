@@ -253,8 +253,9 @@ class UserController extends Controller
     public function checkOutPage(){
         $payments = Payment::select('id', 'account_number', 'account_name', 'account_type')->get();
         $tmpOrder = Session::get('tmpCart');
+        $discount = Session::get('discount');
 
-        return view('user.cart.checkout', compact('payments', 'tmpOrder'));
+        return view('user.cart.checkout', compact('payments', 'tmpOrder', 'discount'));
     }
 
     //apply voucher
@@ -263,31 +264,42 @@ class UserController extends Controller
         $voucherCode = Voucher::where('voucher_code', $request->voucher)->first();
 
         if(!$voucherCode){
-            Alert::error('Error', 'Voucher code is invalid');
-            return back();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Voucher code is invalid'
+            ], 400);
         }
 
         //check expiry date
         if($voucherCode->end_date < now()){
-            Alert::error('Error', 'Voucher code has expired');
-            return back();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Voucher code has expired'
+            ], 400);
         }
 
         //check usage limit
-        if($voucherCode->max_usage <= 0){
-            Alert::error('Error', 'Voucher code usage limit reached');
-            return back();
+        if($voucherCode->use_count >= $voucherCode->max_usage){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Voucher code usage limit reached'
+            ], 400);
         }
 
         $finalAmount = $request->totalAmount - $voucherCode->voucher_price;
 
-        Voucher::where('id', $voucherCode->id)->decrement('max_usage');
-        Voucher::where('id', $voucherCode->id)->increment('use_count');
+        // Ensure final amount doesn't go below 0
+        if($finalAmount < 0){
+            $finalAmount = 0;
+        }
 
-        Alert::success('Success', 'Voucher applied successfully');
+        Session::put(['discount' => $finalAmount]);
+        Session::put(['voucher_id' => $voucherCode->id]);
 
-        return back()->with([
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Voucher applied successfully',
             'finalAmount' => $finalAmount
-        ]);
+        ], 200);
     }
 }
