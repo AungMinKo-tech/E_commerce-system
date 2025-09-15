@@ -32,6 +32,11 @@
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="{{ asset('user/css/style.css') }}" />
 
+    <!-- Order List CSS -->
+    @if(request()->routeIs('user#orderPage'))
+        <link type="text/css" rel="stylesheet" href="{{ asset('user/css/order-list.css') }}" />
+    @endif
+
 </head>
 
 <body>

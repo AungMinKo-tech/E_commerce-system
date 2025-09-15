@@ -16,6 +16,5 @@ class Order extends Model
         'count',
         'status',
         'order_code',
-        'voucher_code'
     ];
 }

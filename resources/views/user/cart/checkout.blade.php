@@ -31,22 +31,22 @@
                             </div>
 
                             <div class="form-group">
-                                <input class="input" type="text" name="bill_name" placeholder="Name">
+                                <input class="input" type="text" name="ship_name" placeholder="Name" required>
                             </div>
 
                             <div class="form-group">
-                                <input class="input" type="email" name="bill_email" placeholder="Email">
+                                <input class="input" type="email" name="ship_email" placeholder="Email" required>
                             </div>
 
                             <div class="form-group">
-                                <input class="input" type="text" name="bill_address" placeholder="Address">
+                                <input class="input" type="text" name="ship_address" placeholder="Address" required>
                             </div>
                             <div class="form-group">
-                                <input class="input" type="text" name="bill_city" placeholder="City">
+                                <input class="input" type="text" name="ship_city" placeholder="City" required>
                             </div>
 
                             <div class="form-group">
-                                <input class="input" type="tel" name="bill_phone" placeholder="Phone">
+                                <input class="input" type="tel" name="ship_phone" placeholder="Phone" required>
                             </div>
                         </div>
                         <!-- /Billing Details -->
@@ -122,18 +122,23 @@
 
                             <div class="form-group mt-3 mb-2">
                                 <label for="name">Name</label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter Your Name">
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter Your Name" required>
+                            </div>
+
+                            <div class="form-group mt-3 mb-2">
+                                <label for="phone">Phone</label>
+                                <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter Your Phone" required>
                             </div>
 
                             <div class="form-group mb-2">
                                 <label for="payslip">Payslip Image</label>
-                                <input type="file" id="payslip" name="payslip" class="form-control">
+                                <input type="file" id="payslip" name="payslip" class="form-control" required>
                             </div>
 
                             <div class="form-group mb-2">
                                 <label for="transaction_id">Transaction ID</label>
                                 <input type="text" id="transaction_id" name="transaction_id" class="form-control"
-                                    placeholder="Enter Your Name">
+                                    placeholder="Enter Your Name" required>
                             </div>
 
                             @if (isset($discount))
@@ -150,12 +155,14 @@
                             </div>
                         @endif
 
-                        <select class="form-control mt-2" name="payment" id="payment">
+                        <select class="form-control mt-2" name="payment" id="payment" required>
                             <option value="">Choose Payment Method</option>
                             @foreach ($payments as $payment)
                                 <option value="{{ $payment->id }}">{{ $payment->account_type }}</option>
                             @endforeach
                         </select>
+
+                        <input type="hidden" name="order_code" value="{{ $tmpOrder[0]['order_code'] }}">
 
                         <button type="submit" class="btn primary-btn order-submit">Place order</button>
                     </div>

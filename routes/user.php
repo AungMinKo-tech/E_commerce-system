@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,6 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     Route::post('addComment', [UserController::class,'addComment'])->name('user#addComment');
 
     //order
-    Route::get('orderPage', [UserController::class,'orderPage'])->name('user#orderPage');
-    Route::post('orderCreate', [UserController::class,'orderCreate'])->name('user#orderCreate');
+    Route::get('orderPage', [OrderController::class,'orderPage'])->name('user#orderPage');
+    Route::post('orderCreate', [OrderController::class,'orderCreate'])->name('user#orderCreate');
 });

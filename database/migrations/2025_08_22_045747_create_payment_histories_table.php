@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_name');
             $table->string('phone');
-            $table->string('address');
+            $table->string('total_amount');
             $table->string('payslip_image');
             $table->string('payment_method');
             $table->string('order_code');

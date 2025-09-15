@@ -317,14 +317,4 @@ class UserController extends Controller
             'finalAmount' => $finalAmount
         ], 200);
     }
-
-    //redirect order page
-    public function orderPage(){
-        return view('user.order.list');
-    }
-
-    //create order
-    public function orderCreate(Request $request){
-        dd($request->all());
-    }
 }
