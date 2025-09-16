@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('price');
             $table->string('photo');
-            $table->string('description');
-            $table->string('detail');
+            $table->text('description');
+            $table->text('detail');
             $table->integer('category_id');
             $table->timestamps();
         });

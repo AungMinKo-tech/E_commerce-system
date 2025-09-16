@@ -18,9 +18,9 @@
             <!-- row -->
             <div class="row">
                 <div class="col-md-12">
-                    @if(isset($orders) && $orders->count() > 0)
+                    @if($orderList)
                         <div class="order-list">
-                            @foreach($orders as $order)
+                            @foreach($orderList as $order)
                                 <div class="order-item">
                                     <div class="order-header">
                                         <div class="row">
@@ -42,13 +42,12 @@
                                                 <div class="product-info">
                                                     <div class="product-item">
                                                         <div class="product-image">
-                                                            <img src="{{ asset('product_image/' . $order->product->photo) }}"
-                                                                 alt="{{ $order->product->name }}"
+                                                            <img src="{{ asset('product_image/' . $order->product_photo) }}"
+                                                                 alt="{{ $order->product_name }}"
                                                                  style="width: 80px; height: 80px; object-fit: cover;">
                                                         </div>
                                                         <div class="product-details">
-                                                            <h5>{{ $order->product->name }}</h5>
-                                                            <p class="product-category">{{ $order->product->category->name ?? 'N/A' }}</p>
+                                                            <h5>{{ $order->product_name }}</h5>
                                                             <p class="product-quantity">Quantity: {{ $order->count }}</p>
                                                         </div>
                                                     </div>
@@ -56,11 +55,13 @@
                                             </div>
                                             <div class="col-md-4 text-right">
                                                 <div class="order-total">
-                                                    <h4>{{ number_format($order->product->price * $order->count) }} MMK</h4>
-                                                    @if($order->voucher_code)
-                                                        <p class="voucher-info">
-                                                            <small>Voucher: {{ $order->voucher_code }}</small>
-                                                        </p>
+                                                    @if ($order->voucher_code)
+                                                    <p class="voucher-info">
+                                                    <h4>{{$order->total_amount}}<br><del>{{ ($order->price * $order->count) }} MMK</del></h4>
+                                                        <small>Voucher: {{ $order->voucher_code }}</small>
+                                                    </p>
+                                                    @else
+                                                    <h4>{{ number_format($order->price * $order->count) }} MMK</h4>
                                                     @endif
                                                 </div>
                                             </div>
@@ -77,16 +78,6 @@
                                                     </p>
                                                 @endif
                                             </div>
-                                            <div class="col-md-6 text-right">
-                                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderDetailsModal">
-                                                    <i class="fa fa-eye"></i> View Details
-                                                </button>
-                                                @if(!$order->status)
-                                                    <button class="btn btn-warning btn-sm">
-                                                        <i class="fa fa-times"></i> Cancel Order
-                                                    </button>
-                                                @endif
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -97,7 +88,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="pagination-wrapper">
-                                    {{ $orders->links() }}
+                                    {{-- {{ $orders->links() }} --}}
                                 </div>
                             </div>
                         </div>
@@ -120,26 +111,4 @@
         <!-- /container -->
     </div>
     <!-- /SECTION -->
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="orderDetailsModalLabel">Order Details</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="orderDetailsContent">
-                    <!-- Order details will be loaded here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 @endsection

@@ -90,7 +90,7 @@
                                             </div>
 
                                             <div class="col-12">
-                                                <label for="detail" class="form-label fw-semibold">detail</label>
+                                                <label for="detail" class="form-label fw-semibold">Detail</label>
                                                 <textarea id="detail" class="form-control" rows="5" placeholder="Write Detail Product..." name="detail" required></textarea>
                                             </div>
                                         </div>

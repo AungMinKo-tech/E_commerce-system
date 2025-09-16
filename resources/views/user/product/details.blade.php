@@ -134,7 +134,9 @@
                             <div id="tab2" class="tab-pane fade in">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <p>{{ $product->detail }}</p>
+                                        @foreach (explode("\n", $product->detail) as $line)
+                                            <li>{{ $line }}</li>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

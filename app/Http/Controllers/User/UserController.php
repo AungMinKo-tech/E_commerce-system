@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\PaymentHistories;
 use App\Models\Rating;
 use App\Models\Comment;
 use App\Models\Payment;
@@ -263,9 +264,17 @@ class UserController extends Controller
 
     //apply voucher
     public function applyVoucher(Request $request){
-        // dd($request->all());
+
         $userId = Auth::user()->id; //login user id
-        $voucherCode = Voucher::where('voucher_code', $request->voucher)->first();
+        $voucherCode = Voucher::where('voucher_code', $request->voucher_code)->first();
+        $alreadyUsed = PaymentHistories::where('user_id', Auth::user()->id)->where('voucher_code', $request->voucher_code)->first();
+
+        if($alreadyUsed){
+            return response()->json([
+                'status'=> 'error',
+                'message' => 'Voucher code is already used!'
+            ], 400);
+        }
 
         if(!$voucherCode){
             return response()->json([
@@ -288,15 +297,6 @@ class UserController extends Controller
                 'status' => 'error',
                 'message' => 'Voucher code usage limit reached'
             ], 400);
-        }
-
-        //already used this voucher
-        $alreadyUsed = Order::where('user_id', $userId)->where('voucher_code', $voucherCode)->exists();
-        if($alreadyUsed){
-            return response()->json([
-                'status' => 'error',
-                'message'=> 'You have already uesd this voucher'
-            ]);
         }
 
         $finalAmount = $request->totalAmount - $voucherCode->voucher_price;

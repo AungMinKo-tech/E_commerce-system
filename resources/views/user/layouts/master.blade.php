@@ -127,6 +127,14 @@
                                             Change Password
                                         </a>
                                     </li>
+                                    <li class="border-bottom">
+                                        <a href="{{route('user#orderPage')}}"
+                                            class="dropdown-item py-3 px-4 d-flex align-items-center"
+                                            style="font-weight: 500;">
+                                            <i class="fa fa-bars mr-2 text-warning"></i>
+                                            Order List
+                                        </a>
+                                    </li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST" class="m-0">
                                             @csrf

@@ -88,7 +88,7 @@
 
                                 <div class="order-col d-flex align-items-center gap-2 flex-nowrap">
                                     <div class="flex-shrink-0"><strong>Voucher Code</strong></div>
-                                    <input type="text" class="form-control flex-grow-1" name="voucher"
+                                    <input type="text" class="form-control flex-grow-1" name="voucher_code"
                                         placeholder="Enter Voucher Code" id="voucherInput" @if ($voucherUsed)
                                         readonly @endif value="{{ $voucherCode ?? old('voucher') }}">
                                     <span id="message"></span><br>
@@ -182,14 +182,14 @@
 <script>
     $(document).ready(function () {
         $('.apply').click(function () {
-            let voucher = $('input[name="voucher"]').val();
+            let voucher = $('input[name="voucher_code"]').val();
             let totalAmount = {{ $tmpOrder[0]['final_total'] }};
 
             $.ajax({
                 type: 'get',
                 url: '{{ route('user#applyVoucher') }}',
                 data: {
-                    'voucher': voucher,
+                    'voucher_code': voucher,
                     'totalAmount': totalAmount
                 },
                 dataType: 'json',
