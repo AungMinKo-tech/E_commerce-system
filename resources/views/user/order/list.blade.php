@@ -29,9 +29,34 @@
                                                 <p class="order-date">Ordered on {{ $order->created_at->format('M d, Y') }}</p>
                                             </div>
                                             <div class="col-md-6 text-right">
-                                                <span class="order-status status-{{ $order->status ? 'completed' : 'pending' }}">
-                                                    {{ $order->status ? 'Completed' : 'Pending' }}
-                                                </span>
+                                                @if ($order->status == 0)
+                                                    <span
+                                                        class="order-status status-pending">
+                                                        Panding
+                                                    </span>
+                                                @endif
+
+                                                @if ($order->status == 1)
+                                                    <span
+                                                        class="order-status status-completed">
+                                                        Accept
+                                                    </span>
+                                                @endif
+
+                                                @if ($order->status == 2)
+                                                    <span
+                                                        class="order-status status-completed">
+                                                        Delivery
+                                                    </span>
+                                                @endif
+
+                                                @if ($order->status == 3)
+                                                    <span
+                                                        class="order-status status-reject">
+                                                        Reject
+                                                    </span>
+                                                @endif
+
                                             </div>
                                         </div>
                                     </div>
@@ -43,8 +68,8 @@
                                                     <div class="product-item">
                                                         <div class="product-image">
                                                             <img src="{{ asset('product_image/' . $order->product_photo) }}"
-                                                                 alt="{{ $order->product_name }}"
-                                                                 style="width: 80px; height: 80px; object-fit: cover;">
+                                                                alt="{{ $order->product_name }}"
+                                                                style="width: 80px; height: 80px; object-fit: cover;">
                                                         </div>
                                                         <div class="product-details">
                                                             <h5>{{ $order->product_name }}</h5>
@@ -56,12 +81,13 @@
                                             <div class="col-md-4 text-right">
                                                 <div class="order-total">
                                                     @if ($order->voucher_code)
-                                                    <p class="voucher-info">
-                                                    <h4>{{$order->total_amount}}<br><del>{{ ($order->price * $order->count) }} MMK</del></h4>
+                                                        <p class="voucher-info">
+                                                        <h4>{{$order->total_amount}}<br><del>{{ ($order->price * $order->count) }}
+                                                                MMK</del></h4>
                                                         <small>Voucher: {{ $order->voucher_code }}</small>
-                                                    </p>
+                                                        </p>
                                                     @else
-                                                    <h4>{{ number_format($order->price * $order->count) }} MMK</h4>
+                                                        <h4>{{ number_format($order->price * $order->count) }} MMK</h4>
                                                     @endif
                                                 </div>
                                             </div>
@@ -88,7 +114,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="pagination-wrapper">
-                                    {{-- {{ $orders->links() }} --}}
+                                    {{ $orderList->links() }}
                                 </div>
                             </div>
                         </div>

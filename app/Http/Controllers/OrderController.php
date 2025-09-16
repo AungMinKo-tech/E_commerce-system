@@ -24,7 +24,7 @@ class OrderController extends Controller
             ->leftJoin('payment_histories','orders.user_id','=','payment_histories.user_id')
             ->where('orders.user_id', Auth::user()->id)
             ->orderBy('orders.created_at', 'desc')
-            ->get();
+            ->paginate(5);
 
         return view('user.order.list', compact('orderList'));
     }

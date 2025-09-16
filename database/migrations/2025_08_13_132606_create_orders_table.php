@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('product_id');
             $table->integer('delivery_man_id')->nullable();
             $table->integer('count');
-            $table->string('status')->default('pending');
+            $table->integer('status')->default(0);
             $table->string('order_code');
             $table->timestamps();
         });

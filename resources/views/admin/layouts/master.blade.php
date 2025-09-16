@@ -108,7 +108,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a href="#sidebarLayouts">
+                                <a href="{{route('admin#orderList')}}">
                                     <i class="fas fa-clipboard-list"></i>
                                     <p>Order Board</p>
                                 </a>

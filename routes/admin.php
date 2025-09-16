@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -44,6 +45,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::post('updateProfile', [ProfileController::class,'updateProfile'])->name('admin#updateProfile');
     });
 
+    //order
+    Route::group(['prefix'=> 'order'], function () {
+        Route::get('orderList', [OrderController::class, 'orderList'])->name('admin#orderList');
+        Route::get('detail/{order_code}', [OrderController::class,'orderDetail'])->name('admin#orderDetail');
+    });
+
+    //list admin/delivery
     Route::get('adminList', [AdminController::class,'adminList'])->name('admin#adminList');
     Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');
     Route::get('deliveryDetails/{id}', [AdminController::class,'deliveryDetails'])->name('admin#deliveryDetails');
