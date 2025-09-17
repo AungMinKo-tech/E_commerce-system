@@ -16,6 +16,7 @@ class PaymentHistories extends Model
         'total_amount',
         'payslip_image',
         'payment_method',
+        'transaction_id',
         'order_code',
         'voucher_code'
     ];

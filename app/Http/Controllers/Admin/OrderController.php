@@ -47,13 +47,14 @@ class OrderController extends Controller
             DB::raw('COUNT(*) AS items_count'),
             DB::raw('ph.total_amount AS total_amount'),
             DB::raw('pm.account_type AS account_type'),
+            DB::raw('ph.voucher_code'),
             DB::raw('ph.payslip_image'),
         ])
             ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('payment_histories as ph', 'orders.order_code', '=', 'ph.order_code')
             ->leftJoin('payments as pm', 'ph.payment_method', '=', 'pm.id')
             ->where('orders.order_code', $order_code)
-            ->groupBy('orders.order_code', 'ph.total_amount', 'ph.payslip_image', 'pm.account_type')
+            ->groupBy('orders.order_code', 'ph.total_amount', 'ph.payslip_image', 'pm.account_type', 'ph.voucher_code')
             ->first();
 
         $items = Order::select(

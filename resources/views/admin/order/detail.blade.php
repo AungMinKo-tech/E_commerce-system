@@ -91,7 +91,7 @@
                                                     </td>
                                                     <td class="text-center">{{ $item->quantity }}</td>
                                                     <td class="text-end">{{ $item->price }}</td>
-                                                    <td class="text-end">{{ $item->subtotal ?? ($item->price * $item->quantity) }}</td>
+                                                    <td class="text-end">{{ isset($item->subtotal) ? (int) $item->subtotal : ((int) ($item->price ?? 0) * (int) ($item->quantity ?? 0)) }}</td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -108,14 +108,14 @@
                                     <div class="d-flex justify-content-between py-1">
                                         <span class="text-muted">Subtotal</span>
                                         <span class="fw-semibold">
-                                                {{ $order->subtotal ?? $order->total_amount }}
+                                                {{ (int) ($order->total_amount ?? 0) }}
                                         </span>
                                     </div>
                                     <div class="d-flex justify-content-between py-1">
-                                        <span class="text-muted">Discount</span>
+                                        <span class="text-muted">Voucher Code</span>
                                         <span class="fw-semibold">
                                             @isset($order)
-                                                -{{ $order->discount ?? '$0.00' }}
+                                                {{ $order->voucher_code ?? '-' }}
                                             @endisset
                                         </span>
                                     </div>
@@ -130,7 +130,7 @@
                                         <span class="fw-semibold">Grand Total</span>
                                         <span class="fw-bold text-primary">
                                             @isset($order)
-                                                {{ $order->total_amount }}
+                                                {{ (int) ($order->total_amount ?? 0) + 3500 }} MMK
                                             @endisset
                                         </span>
                                     </div>
@@ -138,8 +138,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
                 <div class="col-12 col-xl-4">
@@ -176,8 +174,12 @@
                                         <option value="0" {{ ($currentStatus === 0) ? 'selected' : '' }}>Pending</option>
                                         <option value="1" {{ ($currentStatus === 1) ? 'selected' : '' }}>Accept</option>
                                         <option value="2" {{ ($currentStatus === 2) ? 'selected' : '' }}>Shipping</option>
-                                        <option value="3" {{ ($currentStatus === 4) ? 'selected' : '' }}>Reject</option>
+                                        <option value="3" {{ ($currentStatus === 3) ? 'selected' : '' }}>Reject</option>
                                     </select>
+                                </div>
+
+                                <div class="mt-3 text-center">
+                                    <button type="submit" class="btn-md btn-primary">Submit</button>
                                 </div>
                             </div>
                         </div>

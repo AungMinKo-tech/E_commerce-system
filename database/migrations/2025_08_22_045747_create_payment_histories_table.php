@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('total_amount');
             $table->string('payslip_image');
             $table->string('payment_method');
+            $table->string('transaction_id');
             $table->string('order_code');
             $table->string('voucher_code')->nullable();
             $table->timestamps();
