@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductColor;
+use App\Models\ShippingAddress;
 use App\Models\Voucher;
 use Session;
 use App\Models\Cart;
@@ -19,9 +20,9 @@ class OrderController extends Controller
     public function orderPage()
     {
         // Get the latest order for each order code using a subquery
-        $orderList = Order::select('orders.*', 'products.name as product_name', 'products.photo as product_photo', 'products.price', 'payment_histories.total_amount', 'payment_histories.voucher_code', 'payment_histories.user_id as userId')
+        $orderList = Order::select('orders.*', 'products.name as product_name', 'products.photo as product_photo', 'products.price', 'payment_histories.total_amount', 'payment_histories.voucher_code')
             ->leftJoin('products', 'orders.product_id', '=', 'products.id')
-            ->leftJoin('payment_histories','orders.user_id','=','payment_histories.user_id')
+            ->leftJoin('payment_histories','orders.order_code','=','payment_histories.order_code')
             ->where('orders.user_id', Auth::user()->id)
             ->orderBy('orders.created_at', 'desc')
             ->paginate(5);
@@ -39,6 +40,7 @@ class OrderController extends Controller
             DB::transaction(function () use ($request, $order) {
                 $paymentHistoryData = [
                     'user_id' => Auth::user()->id,
+                    'payment_name' => $request->name,
                     'phone' => $request->phone,
                     'payment_method' => $request->payment,
                     'order_code' => $request->order_code,
@@ -53,6 +55,16 @@ class OrderController extends Controller
                 }
 
                 PaymentHistories::create($paymentHistoryData);
+
+                ShippingAddress::create([
+                    'user_id'=> Auth::user()->id,
+                    'name' => $request->ship_name,
+                    'phone'=> $request->ship_phone,
+                    'email'=> $request->ship_email,
+                    'address' => $request->ship_address,
+                    'city' => $request->ship_city,
+                    'order_note' => $request->order_note
+                ]);
 
                 foreach ($order as $item) {
                     $productColor = ProductColor::where('product_id', $item['product_id'])
@@ -70,6 +82,7 @@ class OrderController extends Controller
                     Order::create([
                         'user_id' => $item['user_id'],
                         'product_id' => $item['product_id'],
+                        'color_id' => $item['color_id'],
                         'count' => $item['qty'],
                         'status' => $item['status'],
                         'order_code' => $item['order_code'],
@@ -81,7 +94,7 @@ class OrderController extends Controller
                         ->delete();
                 }
 
-                // voucher can only be used once: adjust counters, then delete after successful order
+                // delete after successful order
                 $voucherId = Session::get('voucher_id');
                 if ($voucherId) {
                     $voucher = Voucher::lockForUpdate()->find($voucherId);

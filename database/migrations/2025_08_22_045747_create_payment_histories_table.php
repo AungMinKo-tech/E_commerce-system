@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('payment_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('user_name');
+            $table->integer('user_id');
+            $table->string('payment_name');
             $table->string('phone');
             $table->string('total_amount');
             $table->string('payslip_image');

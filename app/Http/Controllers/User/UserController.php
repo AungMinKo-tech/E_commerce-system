@@ -267,7 +267,10 @@ class UserController extends Controller
 
         $userId = Auth::user()->id; //login user id
         $voucherCode = Voucher::where('voucher_code', $request->voucher_code)->first();
-        $alreadyUsed = PaymentHistories::where('user_id', Auth::user()->id)->where('voucher_code', $request->voucher_code)->first();
+        $alreadyUsed = PaymentHistories::join('orders', 'payment_histories.order_code', '=', 'orders.order_code')
+            ->where('orders.user_id', $userId)
+            ->where('payment_histories.voucher_code', $request->voucher_code)
+            ->first();
 
         if($alreadyUsed){
             return response()->json([

@@ -11,6 +11,7 @@ class PaymentHistories extends Model
 
     protected $fillable = [
         'user_id',
+        'payment_name',
         'phone',
         'total_amount',
         'payslip_image',

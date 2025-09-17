@@ -33,7 +33,6 @@
                                 <tr>
                                     <th>Order Code</th>
                                     <th>Customer</th>
-                                    <th>Phone</th>
                                     <th>Items</th>
                                     <th>Total</th>
                                     <th>Payment</th>
@@ -46,9 +45,8 @@
                                 @isset($orders)
                                     @forelse ($orders as $order)
                                         <tr>
-                                            <td>{{ $order->order_code }}</td>
+                                            <td><strong>{{ $order->order_code }}</strong></td>
                                             <td>{{ $order->name == null ? $order->nickname : $order->name }}</td>
-                                            <td>{{ $order->phone }}</td>
                                             <td>{{ $order->items_count ?? 0 }}</td>
                                             <td>{{ $order->total_amount }}</td>
                                             <td>
@@ -68,10 +66,6 @@
                                                 @endif
 
                                                 @if ($order->status == 3)
-                                                    <span class="badge badge-success">Delivery</span>
-                                                @endif
-
-                                                @if ($order->status == 4)
                                                     <span class="badge badge-danger">Reject</span>
                                                 @endif
                                             </td>

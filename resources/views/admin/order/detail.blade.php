@@ -27,9 +27,7 @@
                                         <div>
                                             <div class="text-muted small">Order Code</div>
                                             <div class="fs-5 fw-semibold">
-                                                @isset($order)
-                                                    #{{ $order->order_code }}
-                                                @endisset
+                                                    {{ $order->order_code }}
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +35,6 @@
                                 <div class="col-6 col-md-auto">
                                     <div class="text-muted small">Status</div>
                                     <div>
-                                        @isset($order)
                                             @if ($order->status == 0)
                                                 <span class="badge badge-warning">Pending</span>
                                             @elseif ($order->status == 1)
@@ -45,19 +42,14 @@
                                             @elseif ($order->status == 2)
                                                 <span class="badge badge-primary">Shipping</span>
                                             @elseif ($order->status == 3)
-                                                <span class="badge badge-success">Delivery</span>
-                                            @elseif ($order->status == 4)
                                                 <span class="badge badge-danger">Reject</span>
                                             @endif
-                                        @endisset
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-auto">
                                     <div class="text-muted small">Order Date</div>
                                     <div class="fw-semibold">
-                                        @isset($order)
                                             {{ ($order->created_at ?? now())->format('Y-m-d H:i') }}
-                                        @endisset
                                     </div>
                                 </div>
                             </div>
@@ -68,9 +60,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">Items</h6>
                             <span class="text-muted small">
-                                @isset($order)
                                     {{ $order->items_count ?? ($items->count() ?? 0) }} items
-                                @endisset
                             </span>
                         </div>
                         <div class="card-body">
@@ -79,29 +69,25 @@
                                     <thead>
                                         <tr>
                                             <th style="min-width: 220px;">Product</th>
-                                            <th>Variant</th>
+                                            <th>Color</th>
                                             <th class="text-center">Qty</th>
                                             <th class="text-end">Price</th>
                                             <th class="text-end">Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @isset($items)
                                             @forelse ($items as $item)
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex align-items-center gap-3">
-                                                            <div class="avatar-sm rounded bg-light d-flex align-items-center justify-content-center">
-                                                                <i class="fas fa-box text-secondary"></i>
-                                                            </div>
+                                                            <img src="{{ asset('product_image/' . $item->product_photo) }}" alt="{{ $item->product_name }}" class="rounded border" style="width: 64px; height: 64px; object-fit: cover;">
                                                             <div>
                                                                 <div class="fw-semibold">{{ $item->product_name }}</div>
-                                                                <div class="text-muted small">SKU: {{ $item->sku ?? '—' }}</div>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <span class="badge bg-secondary">{{ $item->variant ?? ($item->color ?? 'Default') }}</span>
+                                                        <span class="badge bg-secondary">{{ $item->color_name }}</span>
                                                     </td>
                                                     <td class="text-center">{{ $item->quantity }}</td>
                                                     <td class="text-end">{{ $item->price }}</td>
@@ -112,7 +98,7 @@
                                                     <td colspan="5" class="text-center text-muted">No items found.</td>
                                                 </tr>
                                             @endforelse
-                                        @endisset
+
                                     </tbody>
                                 </table>
                             </div>
@@ -122,9 +108,7 @@
                                     <div class="d-flex justify-content-between py-1">
                                         <span class="text-muted">Subtotal</span>
                                         <span class="fw-semibold">
-                                            @isset($order)
                                                 {{ $order->subtotal ?? $order->total_amount }}
-                                            @endisset
                                         </span>
                                     </div>
                                     <div class="d-flex justify-content-between py-1">
@@ -138,9 +122,7 @@
                                     <div class="d-flex justify-content-between py-1">
                                         <span class="text-muted">Shipping</span>
                                         <span class="fw-semibold">
-                                            @isset($order)
-                                                {{ $order->shipping_fee ?? '$0.00' }}
-                                            @endisset
+                                            3500 MMK
                                         </span>
                                     </div>
                                     <div class="border-top my-2"></div>
@@ -161,44 +143,45 @@
                 </div>
 
                 <div class="col-12 col-xl-4">
-                    <div class="card mb-3">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h6 class="mb-0">Manage Order</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label">Delivery Man</label>
-                                <select class="form-select">
-                                    @isset($deliveryMans)
-                                        <option value="">Select delivery man</option>
-                                        @foreach ($deliveryMans as $man)
-                                            <option value="{{ $man->id }}"
-                                                @isset($order)
-                                                    {{ ($order->delivery_man_id ?? null) == $man->id ? 'selected' : '' }}
-                                                @endisset
-                                            >
-                                                {{ $man->name ?? ($man->nickname ?? 'Unnamed') }}
-                                            </option>
-                                        @endforeach
-                                    @endisset
-                                </select>
+                    <form action="" method="POST">
+                        <div class="card mb-3">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">Manage Order</h6>
                             </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Delivery Man</label>
+                                    <select class="form-select">
+                                        @isset($deliveryMans)
+                                            <option value="">Select delivery man</option>
+                                            @foreach ($deliveryMans as $man)
+                                                <option value="{{ $man->id }}"
+                                                    @isset($order)
+                                                        {{ ($order->delivery_man_id ?? null) == $man->id ? 'selected' : '' }}
+                                                    @endisset
+                                                >
+                                                    {{ $man->name ?? ($man->nickname ?? 'Unnamed') }}
+                                                </option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                </div>
 
-                            <div class="mb-0">
-                                <label class="form-label">Status</label>
-                                <select class="form-select">
-                                    @php
-                                        $currentStatus = isset($order) ? ($order->status ?? 0) : 0;
-                                    @endphp
-                                    <option value="0" {{ ($currentStatus === 0) ? 'selected' : '' }}>Pending</option>
-                                    <option value="1" {{ ($currentStatus === 1) ? 'selected' : '' }}>Accept</option>
-                                    <option value="2" {{ ($currentStatus === 2) ? 'selected' : '' }}>Shipping</option>
-                                    <option value="3" {{ ($currentStatus === 3) ? 'selected' : '' }}>Delivery</option>
-                                    <option value="4" {{ ($currentStatus === 4) ? 'selected' : '' }}>Reject</option>
-                                </select>
+                                <div class="mb-0">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select">
+                                        @php
+                                            $currentStatus = isset($order) ? ($order->status ?? 0) : 0;
+                                        @endphp
+                                        <option value="0" {{ ($currentStatus === 0) ? 'selected' : '' }}>Pending</option>
+                                        <option value="1" {{ ($currentStatus === 1) ? 'selected' : '' }}>Accept</option>
+                                        <option value="2" {{ ($currentStatus === 2) ? 'selected' : '' }}>Shipping</option>
+                                        <option value="3" {{ ($currentStatus === 4) ? 'selected' : '' }}>Reject</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="card mb-3">
                         <div class="card-header">
@@ -215,11 +198,6 @@
                                             {{ $order->name == null ? $order->nickname : $order->name }}
                                         @endisset
                                     </div>
-                                    <div class="text-muted small">
-                                        @isset($order)
-                                            {{ $order->email ?? 'no-email@example.com' }}
-                                        @endisset
-                                    </div>
                                 </div>
                             </div>
                             <div class="mb-2">
@@ -231,19 +209,16 @@
                                 </div>
                             </div>
                             <div class="mb-2">
-                                <div class="text-muted small">Shipping Address</div>
+                                <div class="text-muted small">Address</div>
                                 <div class="fw-semibold">
-                                    @isset($order)
-                                        {{ $order->address ?? '—' }}
-                                    @endisset
+                                    {{ $order->address ?? '—' }}
                                 </div>
                             </div>
+
                             <div class="mb-0">
-                                <div class="text-muted small">Notes</div>
+                                <div class="text-muted small">City</div>
                                 <div class="fw-semibold">
-                                    @isset($order)
-                                        {{ $order->note ?? '—' }}
-                                    @endisset
+                                    {{ $order->city ?? '—' }}
                                 </div>
                             </div>
                         </div>
@@ -258,21 +233,34 @@
                                 <span class="text-muted">Method</span>
                                 <span class="fw-semibold">
                                     @isset($order)
-                                        {{ $order->shipping_method ?? 'Standard' }}
+                                        Delivery
                                     @endisset
                                 </span>
                             </div>
+
                             <div class="mb-2 d-flex justify-content-between">
-                                <span class="text-muted">Tracking No.</span>
-                                <span class="fw-semibold">
-                                    @isset($order)
-                                        {{ $order->tracking_no ?? '—' }}
-                                    @endisset
-                                </span>
+                                <span class="text-muted">Shipping Name</span>
+                                <span class="fw-semibold">{{ $shipping->name ?? '—' }}</span>
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-muted">ETA</span>
-                                <span class="fw-semibold">3-5 business days</span>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span class="text-muted">Shipping Phone</span>
+                                <span class="fw-semibold">{{ $shipping->phone ?? '—' }}</span>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span class="text-muted">Shipping Address</span>
+                                <span class="fw-semibold">{{ $shipping->address}}</span>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span class="text-muted">Shipping City</span>
+                                <span class="fw-semibold">{{ $shipping->city}}</span>
+                            </div>
+
+                            <div class="mb-2 d-flex justify-content-between">
+                                <span class="text-muted">Order Note</span>
+                                <span class="fw-semibold">{{ $shipping->order_note ?? '--'}}</span>
                             </div>
                         </div>
                     </div>
@@ -312,7 +300,7 @@
                                 @isset($order)
                                     @if (!empty($order->payslip_image))
                                         <a href="{{ asset('payslip_image/' . $order->payslip_image) }}" target="_blank">
-                                            <img src="{{ asset('payslip_image/' . $order->payslip_image) }}" alt="Payment slip" class="img-fluid rounded border" />
+                                            <img src="{{ asset('payslip_image/' . $order->payslip_image) }}" alt="Payment slip" class="img-fluid rounded border" style="max-height: 300px; width: 100%; object-fit: contain;" />
                                         </a>
                                     @else
                                         <div class="border rounded bg-light d-flex align-items-center justify-content-center" style="height: 140px;">
