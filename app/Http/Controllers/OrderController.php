@@ -19,13 +19,14 @@ class OrderController extends Controller
     //redirect order page
     public function orderPage()
     {
-        // Get the latest order for each order code using a subquery
+        // Get orders grouped by order_code
         $orderList = Order::select('orders.*', 'products.name as product_name', 'products.photo as product_photo', 'products.price', 'payment_histories.total_amount', 'payment_histories.voucher_code')
             ->leftJoin('products', 'orders.product_id', '=', 'products.id')
             ->leftJoin('payment_histories','orders.order_code','=','payment_histories.order_code')
             ->where('orders.user_id', Auth::user()->id)
             ->orderBy('orders.created_at', 'desc')
-            ->paginate(5);
+            ->get()
+            ->groupBy('order_code');
 
         return view('user.order.list', compact('orderList'));
     }
@@ -43,8 +44,9 @@ class OrderController extends Controller
                     'payment_name' => $request->name,
                     'phone' => $request->phone,
                     'payment_method' => $request->payment,
+                    'transaction_id'=> $request->transaction_id,
                     'order_code' => $request->order_code,
-                    'voucher_code' => $request->voucher_code,
+                    'voucher_code' => Session::get('voucher_code'),
                     'total_amount' => $request->amount
                 ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\DeliveryMans;
 use App\Models\Order;
 use App\Models\ShippingAddress;
 use Illuminate\Http\Request;
@@ -49,6 +50,7 @@ class OrderController extends Controller
             DB::raw('pm.account_type AS account_type'),
             DB::raw('ph.voucher_code'),
             DB::raw('ph.payslip_image'),
+            DB::raw('MIN(ph.transaction_id) AS transaction_id'),
         ])
             ->leftJoin('users', 'orders.user_id', '=', 'users.id')
             ->leftJoin('payment_histories as ph', 'orders.order_code', '=', 'ph.order_code')
@@ -70,6 +72,8 @@ class OrderController extends Controller
             ->where('orders.order_code', $order_code)
             ->get();
 
+        $deliveryMans = DeliveryMans::get();
+
         $userId = Order::where('order_code', $order_code)->value('user_id');
         $shipping = null;
         if ($userId) {
@@ -78,6 +82,30 @@ class OrderController extends Controller
                 ->first();
         }
 
-        return view("admin.order.detail", compact("order", "items", "shipping"));
+        return view("admin.order.detail", compact("order", "items", "shipping", "deliveryMans"));
+    }
+
+    //accept shipping reject order
+    public function confirmOrder(Request $request){
+
+        // dd($request->all());
+        $request->validate([
+            'order_code' => 'required|string',
+            'status' => 'required|integer|in:0,1,2,3,4',
+            'delivery_man_id' => 'nullable|integer|exists:delivery_mans,id'
+        ]);
+
+        $orderCode = $request->order_code;
+        $status = $request->status;
+        $deliveryManId = $request->delivery_man_id;
+
+        Order::where('order_code', $orderCode)
+            ->update([
+                'status' => $status,
+                'delivery_man_id' => $deliveryManId
+            ]);
+
+        return redirect()->route('admin#orderDetail', $orderCode)
+            ->with('success', 'Order status updated successfully!');
     }
 }

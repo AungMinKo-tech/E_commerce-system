@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     Route::group(['prefix'=> 'order'], function () {
         Route::get('orderList', [OrderController::class, 'orderList'])->name('admin#orderList');
         Route::get('detail/{order_code}', [OrderController::class,'orderDetail'])->name('admin#orderDetail');
+        Route::post('confirmOrder', [OrderController::class,'confirmOrder'])->name('admin#confirmOrder');
     });
 
     //list admin/delivery

@@ -3,6 +3,13 @@
 @section('content')
     <div class="container">
         <div class="page-inner">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <div>
                     <h3 class="fw-bold mb-0">Order Details</h3>
@@ -43,6 +50,8 @@
                                                 <span class="badge badge-primary">Shipping</span>
                                             @elseif ($order->status == 3)
                                                 <span class="badge badge-danger">Reject</span>
+                                            @elseif ($order->status == 4)
+                                                <span class="badge badge-success">Delivered</span>
                                             @endif
                                     </div>
                                 </div>
@@ -106,12 +115,6 @@
                             <div class="row justify-content-end mt-3">
                                 <div class="col-12 col-md-8 col-lg-6">
                                     <div class="d-flex justify-content-between py-1">
-                                        <span class="text-muted">Subtotal</span>
-                                        <span class="fw-semibold">
-                                                {{ (int) ($order->total_amount ?? 0) }}
-                                        </span>
-                                    </div>
-                                    <div class="d-flex justify-content-between py-1">
                                         <span class="text-muted">Voucher Code</span>
                                         <span class="fw-semibold">
                                             @isset($order)
@@ -130,7 +133,7 @@
                                         <span class="fw-semibold">Grand Total</span>
                                         <span class="fw-bold text-primary">
                                             @isset($order)
-                                                {{ (int) ($order->total_amount ?? 0) + 3500 }} MMK
+                                                {{ (int) ($order->total_amount ?? 0) }} MMK
                                             @endisset
                                         </span>
                                     </div>
@@ -141,7 +144,9 @@
                 </div>
 
                 <div class="col-12 col-xl-4">
-                    <form action="" method="POST">
+                    <form action="{{ route('admin#confirmOrder') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="order_code" value="{{ $order->order_code }}">
                         <div class="card mb-3">
                             <div class="card-header d-flex align-items-center justify-content-between">
                                 <h6 class="mb-0">Manage Order</h6>
@@ -149,16 +154,12 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Delivery Man</label>
-                                    <select class="form-select">
+                                    <select class="form-select" name="delivery_man_id">
                                         @isset($deliveryMans)
                                             <option value="">Select delivery man</option>
                                             @foreach ($deliveryMans as $man)
-                                                <option value="{{ $man->id }}"
-                                                    @isset($order)
-                                                        {{ ($order->delivery_man_id ?? null) == $man->id ? 'selected' : '' }}
-                                                    @endisset
-                                                >
-                                                    {{ $man->name ?? ($man->nickname ?? 'Unnamed') }}
+                                                <option value="{{ $man->id }}">
+                                                    {{ $man->name }}
                                                 </option>
                                             @endforeach
                                         @endisset
@@ -167,7 +168,7 @@
 
                                 <div class="mb-0">
                                     <label class="form-label">Status</label>
-                                    <select class="form-select">
+                                    <select class="form-select" name="status">
                                         @php
                                             $currentStatus = isset($order) ? ($order->status ?? 0) : 0;
                                         @endphp
@@ -175,6 +176,7 @@
                                         <option value="1" {{ ($currentStatus === 1) ? 'selected' : '' }}>Accept</option>
                                         <option value="2" {{ ($currentStatus === 2) ? 'selected' : '' }}>Shipping</option>
                                         <option value="3" {{ ($currentStatus === 3) ? 'selected' : '' }}>Reject</option>
+                                        <option value="4" {{ ($currentStatus === 4) ? 'selected' : '' }}>Delivered</option>
                                     </select>
                                 </div>
 
