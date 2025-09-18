@@ -17,51 +17,9 @@ class DeliveryController extends Controller
     {
         $deliveryMan = DeliveryMans::where('user_id', Auth::id())->first();
 
-        if (!$deliveryMan) {
-            return redirect()->back()->with('error', 'Delivery person profile not found');
-        }
+        $shippingList = Order::where('user_id', Auth::id())->get();
 
-        // Get today's deliveries
-        $todayDeliveries = Order::where('delivery_man_id', $deliveryMan->id)
-            ->where('status', 2)
-            ->whereDate('created_at', Carbon::today())
-            ->count();
-
-        // Get completed deliveries
-        $completedDeliveries = Delivery::where('delivery_man_id', $deliveryMan->id)
-            ->where('status', 4)
-            ->count();
-
-        // Get total deliveries
-        $totalDeliveries = Delivery::where('delivery_man_id', $deliveryMan->id)->count();
-
-        // Get this month's deliveries
-        $thisMonthDeliveries = Delivery::where('delivery_man_id', $deliveryMan->id)
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->get();
-
-        // Get recent activities (last 5)
-        $recentActivities = Delivery::where('delivery_man_id', $deliveryMan->id)
-            ->with(['order', 'user'])
-            ->orderBy('updated_at', 'desc')
-            ->limit(5)
-            ->get()
-            ->map(function ($delivery) {
-                return (object) [
-                    'title' => 'Delivery #' . ($delivery->order->order_code ?? 'N/A'),
-                    'description' => 'Status: ' . ucfirst($delivery->status),
-                    'created_at' => $delivery->updated_at
-                ];
-            });
-
-        return view("admin.delivery.home", compact(
-            'todayDeliveries',
-            'completedDeliveries',
-            'totalDeliveries',
-            'thisMonthDeliveries',
-            'recentActivities'
-        ));
+        return view("admin.delivery.home", compact(""));
     }
 
     // Start delivery
