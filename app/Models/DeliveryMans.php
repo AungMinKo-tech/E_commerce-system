@@ -17,4 +17,14 @@ class DeliveryMans extends Model
         'delivery_zone',
         'work_time'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function deliveries()
+    {
+        return $this->hasMany(Delivery::class, 'delivery_man_id');
+    }
 }

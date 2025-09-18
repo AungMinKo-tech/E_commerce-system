@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 require_once __DIR__.'/admin.php';
 require_once __DIR__.'/user.php';
+require_once __DIR__.'/delivery.php';
 
 // Smart root route that redirects based on authentication and role
 Route::get('/', function () {

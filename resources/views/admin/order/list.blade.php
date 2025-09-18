@@ -217,7 +217,6 @@
             if (typeof Swal === 'undefined') {
                 console.error('SweetAlert is not loaded');
                 alert(`Are you sure you want to ${statusText.toLowerCase()} this order?`);
-                // Proceed with form submission
                 submitStatusUpdate(orderCode, status);
                 return;
             }
@@ -233,7 +232,6 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Show loading
                     Swal.fire({
                         title: 'Updating...',
                         text: 'Please wait while we update the order status.',
@@ -251,7 +249,6 @@
             });
         }
 
-        // Helper function to submit status update
         function submitStatusUpdate(orderCode, status) {
             // Create a form to submit the status update
             const form = document.createElement('form');

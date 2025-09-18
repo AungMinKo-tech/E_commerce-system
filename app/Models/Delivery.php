@@ -16,4 +16,19 @@ class Delivery extends Model
         "status",
         "delivery_at"
     ];
+
+    public function deliveryMan()
+    {
+        return $this->belongsTo(DeliveryMans::class, 'delivery_man_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
