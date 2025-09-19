@@ -16,6 +16,7 @@ class ShippingAddress extends Model
         "address",
         "city",
         "phone",
+        "order_code",
         "order_note"
     ];
 }

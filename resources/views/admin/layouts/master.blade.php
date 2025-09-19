@@ -138,6 +138,13 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{{ route('delivery#delivered') }}">
+                                    <i class="fas fa-layer-group"></i>
+                                    <p>Delivered Order</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{ route('admin#wishListPage') }}">
                                     <i class="fas fa-heart"></i>
                                     <p>Wishlist</p>
@@ -168,17 +175,23 @@
                             <li class="nav-item">
                                 <a href="{{ route('delivery#home') }}">
                                     <i class="fas fa-home"></i>
-                                    <p>Dashboard</p>
+                                    <p>Delivery List</p>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a href="">
+                                <a href="{{ route('delivery#delivered') }}">
                                     <i class="fas fa-layer-group"></i>
-                                    <p>Management Product</p>
+                                    <p>Delivered Order</p>
                                 </a>
                             </li>
                         </ul>
+                        <form action="{{route('logout')}}" method="POST">
+                            @csrf
+                            <div class="text-center mt-2">
+                                <button type="submit" class="btn btn-primary">Logout</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             @endif

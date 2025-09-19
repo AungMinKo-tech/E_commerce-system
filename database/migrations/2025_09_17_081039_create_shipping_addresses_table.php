@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('city');
             $table->string('phone');
+            $table->string('order_code');
             $table->text('order_note')->nullable();
             $table->timestamps();
         });

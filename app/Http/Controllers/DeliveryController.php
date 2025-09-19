@@ -15,83 +15,57 @@ class DeliveryController extends Controller
     //redirect delivery home
     public function home()
     {
-        $deliveryMan = DeliveryMans::where('user_id', Auth::id())->first();
+        $shippingList = Order::select(
+                'orders.order_code',
+                \DB::raw('MAX(delivery_mans.name) as delivery_name'),
+                \DB::raw('MAX(shipping_addresses.name) as shipping_name'),
+                \DB::raw('MAX(shipping_addresses.email) as shipping_email'),
+                \DB::raw('MAX(shipping_addresses.address) as shipping_address'),
+                \DB::raw('MAX(shipping_addresses.city) as shipping_city'),
+                \DB::raw('MAX(shipping_addresses.phone) as shipping_phone'),
+                \DB::raw('MAX(shipping_addresses.order_note) as order_note'),
+                \DB::raw('MAX(orders.created_at) as created_at')
+            )
+            ->join('delivery_mans', 'delivery_mans.id', '=', 'orders.delivery_man_id')
+            ->join('shipping_addresses', 'shipping_addresses.order_code', '=', 'orders.order_code')
+            ->where('status', 2)
+            ->groupBy('orders.order_code')
+            ->get();
 
-        $shippingList = Order::where('user_id', Auth::id())->get();
-
-        return view("admin.delivery.home", compact(""));
+        return view("admin.delivery.home", compact( "shippingList"));
     }
 
-    // Start delivery
-    public function startDelivery($id)
-    {
-        $delivery = Delivery::findOrFail($id);
+    //complete delivery
+    public function completeDelivery(Request $request){
 
-        // Check if delivery belongs to current delivery man
-        $deliveryMan = DeliveryMans::where('user_id', Auth::id())->first();
-        if ($delivery->delivery_man_id != $deliveryMan->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized']);
-        }
+        Order::where('order_code', $request->order_code)->update([
+            'status' => 4, // 4 = delivered
+            'updated_at' => Carbon::now()
+        ]);
 
-        $delivery->status = 'in_progress';
-        $delivery->save();
-
-        return response()->json(['success' => true, 'message' => 'Delivery started successfully']);
+        return redirect()->route('delivery#home')->with(['message' => 'Delivery marked as complete.']);
     }
 
-    // Complete delivery
-    public function completeDelivery($id)
-    {
-        $delivery = Delivery::findOrFail($id);
+    //view delievered order
+    public function viewDelivered(){
+        $deliveredList = Order::select(
+                'orders.order_code',
+                \DB::raw('MAX(delivery_mans.name) as delivery_name'),
+                \DB::raw('MAX(shipping_addresses.name) as shipping_name'),
+                \DB::raw('MAX(shipping_addresses.email) as shipping_email'),
+                \DB::raw('MAX(shipping_addresses.address) as shipping_address'),
+                \DB::raw('MAX(shipping_addresses.city) as shipping_city'),
+                \DB::raw('MAX(shipping_addresses.phone) as shipping_phone'),
+                \DB::raw('MAX(shipping_addresses.order_note) as order_note'),
+                \DB::raw('MAX(orders.created_at) as created_at'),
+                \DB::raw('MAX(orders.updated_at) as updated_at')
+            )
+            ->join('delivery_mans', 'delivery_mans.id', '=', 'orders.delivery_man_id')
+            ->join('shipping_addresses', 'shipping_addresses.order_code', '=', 'orders.order_code')
+            ->where('status', 4) // 4 = delivered
+            ->groupBy('orders.order_code')
+            ->get();
 
-        // Check if delivery belongs to current delivery man
-        $deliveryMan = DeliveryMans::where('user_id', Auth::id())->first();
-        if ($delivery->delivery_man_id != $deliveryMan->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized']);
-        }
-
-        $delivery->status = 'delivered';
-        $delivery->delivery_at = Carbon::now();
-        $delivery->save();
-
-        // Update order status
-        if ($delivery->order) {
-            $delivery->order->status = 'delivered';
-            $delivery->order->save();
-        }
-
-        return response()->json(['success' => true, 'message' => 'Delivery completed successfully']);
-    }
-
-    // Get delivery details
-    public function getDeliveryDetails($id)
-    {
-        $delivery = Delivery::with(['order', 'user', 'deliveryMan'])
-            ->findOrFail($id);
-
-        // Check if delivery belongs to current delivery man
-        $deliveryMan = DeliveryMans::where('user_id', Auth::id())->first();
-        if ($delivery->delivery_man_id != $deliveryMan->id) {
-            return response()->json(['success' => false, 'message' => 'Unauthorized']);
-        }
-
-        $html = '
-        <div class="row">
-            <div class="col-md-6">
-                <h6>Order Information</h6>
-                <p><strong>Order Code:</strong> #' . ($delivery->order->order_code ?? 'N/A') . '</p>
-                <p><strong>Customer:</strong> ' . ($delivery->user->name ?? 'N/A') . '</p>
-                <p><strong>Phone:</strong> ' . ($delivery->user->phone ?? 'N/A') . '</p>
-            </div>
-            <div class="col-md-6">
-                <h6>Delivery Information</h6>
-                <p><strong>Status:</strong> ' . ucfirst($delivery->status) . '</p>
-                <p><strong>Assigned:</strong> ' . $delivery->created_at->format('M d, Y H:i') . '</p>
-                <p><strong>Address:</strong> ' . ($delivery->order->shipping_address ?? 'N/A') . '</p>
-            </div>
-        </div>
-        ';
-
-        return response($html);
+        return view("admin.delivery.list", compact( "deliveredList"));
     }
 }

@@ -65,6 +65,7 @@ class OrderController extends Controller
                     'email'=> $request->ship_email,
                     'address' => $request->ship_address,
                     'city' => $request->ship_city,
+                    'order_code' => $request->order_code,
                     'order_note' => $request->order_note
                 ]);
 

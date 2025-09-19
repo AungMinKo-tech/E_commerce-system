@@ -244,52 +244,10 @@ class AdminController extends Controller
     }
 
     //shipping page
-    public function shippingList(Request $request){
-        $query = Delivery::with(['deliveryMan.user', 'user', 'order']);
+    // public function shippingList(Request $request){
 
-        // Search functionality
-        if($request->has('search') && $request->search) {
-            $search = $request->search;
-            $query->whereHas('user', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            })->orWhereHas('deliveryMan.user', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%");
-            });
-        }
-
-        $deliveries = $query->orderBy('created_at', 'desc')->paginate(10);
-        $deliveryMans = DeliveryMans::with('user')->get();
-
-        return view('admin.shipping.list', compact('deliveries', 'deliveryMans'));
-    }
-
-    //update delivery status
-    public function updateDeliveryStatus(Request $request){
-        $request->validate([
-            'delivery_id' => 'required|exists:deliveries,id',
-            'status' => 'required|string|in:pending,assigned,in_transit,delivered,failed',
-            'delivery_man_id' => 'nullable|exists:delivery_mans,id'
-        ]);
-
-        $delivery = \App\Models\Delivery::find($request->delivery_id);
-
-        if($delivery){
-            $delivery->update([
-                'status' => $request->status,
-                'delivery_man_id' => $request->delivery_man_id,
-                'delivery_at' => $request->status === 'delivered' ? now() : null
-            ]);
-
-            Alert::success('Success', 'Delivery status updated successfully!');
-        } else {
-            Alert::error('Error', 'Delivery not found!');
-        }
-
-        return back();
-    }
+    //     return view('admin.shipping.list');
+    // }
 
     //check admin validate
     private function checkAdminValidate(Request $request)
