@@ -243,12 +243,6 @@ class AdminController extends Controller
         return view('admin.wishlist.list', compact('wishlists'));
     }
 
-    //shipping page
-    // public function shippingList(Request $request){
-
-    //     return view('admin.shipping.list');
-    // }
-
     //check admin validate
     private function checkAdminValidate(Request $request)
     {

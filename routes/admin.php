@@ -55,10 +55,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     //wishlist
     Route::get('wishListPage', [AdminController::class,'wishList'])->name('admin#wishListPage');
 
-    //shipping
-    Route::get('shippingList', [AdminController::class,'shippingList'])->name('admin#shippingList');
-    Route::post('updateDeliveryStatus', [AdminController::class,'updateDeliveryStatus'])->name('admin#updateDeliveryStatus');
-
     //list admin/delivery
     Route::get('adminList', [AdminController::class,'adminList'])->name('admin#adminList');
     Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');

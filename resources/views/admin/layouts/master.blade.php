@@ -131,13 +131,6 @@
                             @endif
 
                             <li class="nav-item">
-                                <a href="{{ route('admin#shippingList') }}">
-                                    <i class="fas fa-truck"></i>
-                                    <p>Shipping</p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
                                 <a href="{{ route('delivery#delivered') }}">
                                     <i class="fas fa-layer-group"></i>
                                     <p>Delivered Order</p>
