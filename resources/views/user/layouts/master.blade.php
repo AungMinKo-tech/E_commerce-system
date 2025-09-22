@@ -58,24 +58,8 @@
                     </div>
                     <!-- /LOGO -->
 
-                    <!-- SEARCH BAR -->
-                    <div class="col-md-5">
-                        <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">All Categories</option>
-                                    <option value="1">Category 01</option>
-                                    <option value="1">Category 02</option>
-                                </select>
-                                <input class="input" placeholder="Search here">
-                                <button class="search-btn">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /SEARCH BAR -->
-
                     <!-- ACCOUNT -->
-                    <div class="col-md-4">
+                    <div class="col-md-9">
                         <div class="header-ctn">
                             <!-- Wishlist -->
                             <div class=>
@@ -170,7 +154,7 @@
                 <!-- NAV -->
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a href="{{ route('user#home') }}">Home</a></li>
-                    <li><a href="#">Categories</a></li>
+                    <li><a href="{{route('user#categoryPage')}}">Categories</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Map</a></li>
                     <li><a href="#">Contact</a></li>

@@ -320,4 +320,9 @@ class UserController extends Controller
             'finalAmount' => $finalAmount
         ], 200);
     }
+
+    //redirect category page
+    public function category(){
+        return view('user.home.category');
+    }
 }

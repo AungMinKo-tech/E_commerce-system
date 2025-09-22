@@ -13,6 +13,9 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     Route::get('changePasswordPage', [ProfileController::class,'changePasswordPage'])->name('user#changePasswordPage');
     Route::post('changePassword', [ProfileController::class,'changePassword'])->name('user#changePassword');
 
+    //category
+    Route::get('categoryPage', [UserController::class,'category'])->name('user#categoryPage');
+
     //wishlist
     Route::post('wishList', [UserController::class,'wishList'])->name('user#wishList');
     Route::get('viewWishList', [UserController::class,'viewWishList'])->name('user#viewWishList');
