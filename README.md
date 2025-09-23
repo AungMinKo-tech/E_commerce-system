@@ -3,7 +3,7 @@
 
 ## Features
 <li>User authentication (login(Google & GitHub)/register)</li>
-<li>Authorization(Owner/Staff/Delivery?User)</li>
+<li>Authorization(Owner/Staff/Delivery/User)</li>
 <li>Colors, Products & Category management</li>
 <li>Shopping cart and checkout</li>
 <li>Order management with voucher code</li>
