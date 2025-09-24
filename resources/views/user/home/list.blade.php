@@ -59,10 +59,6 @@
                                                                 class="fa {{ in_array($product->id, $wishlistProductIds ?? []) ? 'fa-heart' : 'fa-heart-o' }}"></i>
                                                         </button>
                                                     </form>
-
-                                                    <button class="add-to-compare"><i class="fa fa-exchange"></i><span
-                                                            class="tooltipp">add to compare</span></button>
-
                                                 </div>
                                             </div>
                                             <form action="{{route('user#detailProduct', $product->id)}}" method="GET">

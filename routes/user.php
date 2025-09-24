@@ -43,4 +43,7 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
     //order
     Route::get('orderPage', [OrderController::class,'orderPage'])->name('user#orderPage');
     Route::post('orderCreate', [OrderController::class,'orderCreate'])->name('user#orderCreate');
+
+    //about static page
+    Route::view('about', 'user.home.about')->name('user#about');
 });

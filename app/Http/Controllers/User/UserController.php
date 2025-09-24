@@ -322,7 +322,27 @@ class UserController extends Controller
     }
 
     //redirect category page
-    public function category(){
-        return view('user.home.category');
+    public function category(Request $request){
+        $categories = Category::all();
+        $productsQuery = Product::query();
+
+        // Filter by category
+        if ($request->filled('category')) {
+            $productsQuery->whereIn('category_id', $request->category);
+        }
+
+        // Filter by minimum price
+        if ($request->filled('price_min')) {
+            $productsQuery->where('price', '>=', $request->price_min);
+        }
+
+        // Filter by maximum price
+        if ($request->filled('price_max')) {
+            $productsQuery->where('price', '<=', $request->price_max);
+        }
+
+        $products = $productsQuery->get();
+
+        return view('user.home.category', compact('categories', 'products'));
     }
 }
