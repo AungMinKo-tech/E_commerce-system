@@ -21,6 +21,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
             Route::get('delete/{id}', [CategoryController::class, 'deleteCategory'])->name('admin#categoryDelete');
         });
 
+    //product
     Route::group(['prefix' => 'product'], function () {
         Route::get('list/{action?}', [ProductController::class,'listProduct'])->name('admin#productList');
         Route::get('addProductPage', [ProductController::class, 'addProductPage'])->name('admin#addProductPage');
@@ -31,12 +32,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::get('details/{id}', [ProductController::class,'detailsProduct'])->name('admin#detailsProduct');
     });
 
+    //color
     Route::group(['prefix'=> 'color'], function () {
         Route::get('addColor', [AdminController::class,'addColor'])->name('admin#addColor');
         Route::post('createColor', [AdminController::class, 'createColor'])->name('admin#createColor');
         Route::get('delete/{id}', [AdminController::class,'deleteColor'])->name('admin#deleteColor');
     });
 
+    //profile
     Route::group(['prefix'=> 'profile'], function () {
         Route::get('changePassword', [ProfileController::class,'changePassword'])->name('admin#changePassword');
         Route::post('updatePassword', [ProfileController::class,'updatePassword'])->name('admin#updatePassword');
@@ -60,6 +63,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');
     Route::get('deliveryDetails/{id}', [AdminController::class,'deliveryDetails'])->name('admin#deliveryDetails');
 
+    //add new admin and delivery
     Route::group(['middleware'=> 'ownerMiddleware'], function () {
         Route::get('newAdminPage', [AdminController::class,'newAdminPage'])->name('admin#newAdminPage');
         Route::post('newAdmin', [AdminController::class,'newAdmin'])->name('admin#newAdmin');
