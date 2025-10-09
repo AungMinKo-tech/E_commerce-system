@@ -283,7 +283,7 @@ class AdminController extends Controller
         $totalCustomers = PaymentHistories::count('id');
 
         $topSelling = Order::select(
-            'products.name as product_name' ,
+            'products.name as product_name',
             DB::raw('SUM(orders.count) as total_sold')
         )
             ->join('products', 'orders.product_id', '=', 'products.id')
