@@ -154,12 +154,12 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Delivery Man</label>
-                                    <select class="form-select" name="delivery_man_id">
+                                    <select class="form-select" name="delivery_info">
                                         @isset($deliveryMans)
                                             <option value="">Select delivery man</option>
                                             @foreach ($deliveryMans as $man)
-                                                <option value="{{ $man->id }}">
-                                                    {{ $man->name }}
+                                                <option value="{{ $man->id }}|{{ $man->delivery_name }}">
+                                                    {{ $man->delivery_name }}
                                                 </option>
                                             @endforeach
                                         @endisset

@@ -13,6 +13,7 @@ class Order extends Model
         'user_id',
         'product_id',
         'color_id',
+        'delivery_name',
         'delivery_man_id',
         'count',
         'status',
