@@ -63,6 +63,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');
     Route::get('deliveryDetails/{id}', [AdminController::class,'deliveryDetails'])->name('admin#deliveryDetails');
 
+    //sale information
+    Route::get('saleInfo', [AdminController::class, 'saleInfo'])->name('admin#saleInfo');
+
     //add new admin and delivery
     Route::group(['middleware'=> 'ownerMiddleware'], function () {
         Route::get('newAdminPage', [AdminController::class,'newAdminPage'])->name('admin#newAdminPage');

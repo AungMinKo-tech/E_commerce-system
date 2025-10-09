@@ -17,7 +17,7 @@ class DeliveryController extends Controller
     {
         $shippingList = Order::select(
                 'orders.order_code',
-                \DB::raw('MAX(delivery_mans.name) as delivery_name'),
+                \DB::raw('MAX(users.name) as delivery_name'),
                 \DB::raw('MAX(shipping_addresses.name) as shipping_name'),
                 \DB::raw('MAX(shipping_addresses.email) as shipping_email'),
                 \DB::raw('MAX(shipping_addresses.address) as shipping_address'),
@@ -27,8 +27,10 @@ class DeliveryController extends Controller
                 \DB::raw('MAX(orders.created_at) as created_at')
             )
             ->join('delivery_mans', 'delivery_mans.id', '=', 'orders.delivery_man_id')
+            ->join('users', 'users.id', '=', 'orders.user_id')
             ->join('shipping_addresses', 'shipping_addresses.order_code', '=', 'orders.order_code')
             ->where('status', 2)
+            ->where('delivery_name', Auth::user()->name)
             ->groupBy('orders.order_code')
             ->get();
 
