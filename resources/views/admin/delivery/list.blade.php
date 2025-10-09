@@ -55,6 +55,7 @@
                                                 <th>Phone</th>
                                                 <th>Order Note</th>
                                                 <th>Assigned Time</th>
+                                                <th>Delivery Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,6 +68,7 @@
                                                     <td>{{ $delivery->shipping_phone }}</td>
                                                     <td>{{ $delivery->order_note }}</td>
                                                     <td>{{ $delivery->updated_at->format('M d, Y H:i') }}</td>
+                                                    <td>{{ $delivery->delivery_name }}</td>
                                                 </tr>
                                             @empty
                                                 <tr>
