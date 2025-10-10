@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\VoucherController;
 
 Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin#dashboard');
+    Route::get('/userDetail/{id}', [AdminController::class, 'userDetail'])->name('admin#userDetail');
+    Route::post('/deleteUser', [AdminController::class, 'deleteUser'])->name('admin#deleteUser');
 
     //Category
     Route::group(['prefix' => 'category'], function () {
