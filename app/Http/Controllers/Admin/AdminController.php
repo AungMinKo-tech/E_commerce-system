@@ -21,7 +21,22 @@ class AdminController extends Controller
     //redirect admin dashboard
     public function dashboard()
     {
-        return view('admin.home.dashboard');
+        $users = User::latest()->paginate(10);
+
+        return view('admin.home.dashboard', compact('users'));
+    }
+
+    public function userDetail($id) {
+        $user = User::find($id);
+
+        return view('admin.home.userdetails', compact('user'));
+    }
+
+    public function deleteUser(Request $request) {
+        // dd($request->toArray());
+        User::find($request->id, 'id')->delete();
+
+        return to_route('admin#dashboard');
     }
 
     //add new admin & delivery man
@@ -264,8 +279,6 @@ class AdminController extends Controller
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-
-            // dd($monthlySales->toArray());
 
         $months = [];
         $salesData = [];
