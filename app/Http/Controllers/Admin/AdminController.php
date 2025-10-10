@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Color;
+use App\Models\PaymentHistories;
 use App\Models\User;
+use App\Models\Color;
+use App\Models\Order;
 use App\Models\Category;
 use App\Models\Delivery;
 use App\Models\DeliveryMans;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,7 +21,22 @@ class AdminController extends Controller
     //redirect admin dashboard
     public function dashboard()
     {
-        return view('admin.home.dashboard');
+        $users = User::latest()->paginate(10);
+
+        return view('admin.home.dashboard', compact('users'));
+    }
+
+    public function userDetail($id) {
+        $user = User::find($id);
+
+        return view('admin.home.userdetails', compact('user'));
+    }
+
+    public function deleteUser(Request $request) {
+        // dd($request->toArray());
+        User::find($request->id, 'id')->delete();
+
+        return to_route('admin#dashboard');
     }
 
     //add new admin & delivery man
@@ -169,71 +188,77 @@ class AdminController extends Controller
     }
 
     //admin delivery user details
-    public function adminDetails($id){
+    public function adminDetails($id)
+    {
         $user = User::find($id);
 
         return view('admin.home.details', compact('user'));
     }
 
     //delivery details
-    public function deliveryDetails($id){
+    public function deliveryDetails($id)
+    {
         $delivery = DeliveryMans::query()
-        ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
-        ->where('delivery_mans.id', $id)
-        ->select([
-            'users.*',
-            'delivery_mans.id as delivery_man_id',
-            'delivery_mans.user_id as delivery_user_id',
-            'delivery_mans.document_cv',
-            'delivery_mans.license',
-            'delivery_mans.vehicle',
-            'delivery_mans.delivery_zone',
-            'delivery_mans.work_time',
-        ])
-        ->first();
+            ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
+            ->where('delivery_mans.id', $id)
+            ->select([
+                'users.*',
+                'delivery_mans.id as delivery_man_id',
+                'delivery_mans.user_id as delivery_user_id',
+                'delivery_mans.document_cv',
+                'delivery_mans.license',
+                'delivery_mans.vehicle',
+                'delivery_mans.delivery_zone',
+                'delivery_mans.work_time',
+            ])
+            ->first();
 
         return view('admin.home.deliveryDetails', compact('delivery'));
     }
 
     //add color page
-    public function addColor(){
+    public function addColor()
+    {
         $colors = Color::paginate(5);
 
         return view('admin.color.add', compact('colors'));
     }
 
     //create color
-    public function createColor(Request $request){
+    public function createColor(Request $request)
+    {
         $request->validate([
             'name' => 'required',
         ]);
 
         Color::create($request->all());
 
-        Alert::success('Title','Successful Created Color');
+        Alert::success('Title', 'Successful Created Color');
 
         return back();
     }
 
     //delete color
-    public function deleteColor($id){
+    public function deleteColor($id)
+    {
         Color::where('id', $id)->delete();
 
         return back();
     }
 
     //wishlist page
-    public function wishList(Request $request){
+    public function wishList(Request $request)
+    {
         $query = \App\Models\Wishlist::with(['user', 'product']);
 
         // Search functionality
-        if($request->has('search') && $request->search) {
+        if ($request->has('search') && $request->search) {
             $search = $request->search;
-            $query->whereHas('user', function($q) use ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            })->orWhereHas('product', function($q) use ($search) {
+                    ->orWhere('nickname', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })->orWhereHas('product', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
         }
@@ -241,6 +266,46 @@ class AdminController extends Controller
         $wishlists = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('admin.wishlist.list', compact('wishlists'));
+    }
+
+    //sale information
+    public function saleInfo()
+    {
+        $monthlySales = PaymentHistories::select(
+            DB::raw('SUM(total_amount) as total_sales'),
+            DB::raw('MONTH(created_at) as month')
+        )
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $months = [];
+        $salesData = [];
+
+        foreach (range(1, 12) as $m) {
+            $monthName = Carbon::create()->month($m)->format('M');
+            $months[] = $monthName;
+
+            $sale = $monthlySales->firstWhere('month', $m);
+            $salesData[] = $sale ? $sale->total_sales : 0;
+        }
+
+        $totalSales = $monthlySales->sum('total_sales');
+        $totalOrders = PaymentHistories::count('order_code');
+        $totalCustomers = PaymentHistories::count('id');
+
+        $topSelling = Order::select(
+            'products.name as product_name',
+            DB::raw('SUM(orders.count) as total_sold')
+        )
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->groupBy('products.name')
+            ->orderBy('total_sold', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('admin.saleInfo.sale', compact('months', 'salesData', 'totalSales', 'totalOrders', 'totalCustomers', 'topSelling'));
     }
 
     //check admin validate

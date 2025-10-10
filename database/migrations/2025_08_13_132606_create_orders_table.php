@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('product_id');
             $table->integer('color_id');
+            $table->string('delivery_name')->nullable();
             $table->integer('delivery_man_id')->nullable();
             $table->integer('count');
             $table->integer('status')->default(0);

@@ -18,6 +18,7 @@ class OrderController extends Controller
             'orders.order_code',
             DB::raw('MIN(orders.created_at) AS created_at'),
             DB::raw('MIN(orders.status) AS status'),
+            DB::raw('MIN(orders.delivery_name) AS delivery_name'),
             DB::raw('MIN(users.name) AS name'),
             DB::raw('MIN(users.nickname) AS nickname'),
             DB::raw('MIN(users.phone) AS phone'),
@@ -72,7 +73,9 @@ class OrderController extends Controller
             ->where('orders.order_code', $order_code)
             ->get();
 
-        $deliveryMans = DeliveryMans::get();
+        $deliveryMans = DeliveryMans::select('users.name as delivery_name', 'delivery_mans.id')
+                    ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
+                    ->get();
 
         $userId = Order::where('order_code', $order_code)->value('user_id');
         $shipping = null;
@@ -92,16 +95,18 @@ class OrderController extends Controller
         $request->validate([
             'order_code' => 'required|string',
             'status' => 'required|integer|in:0,1,2,3,4',
-            'delivery_man_id' => 'nullable|integer|exists:delivery_mans,id'
+            'delivery_info' => 'nullable|string'
         ]);
+
+        list($deliveryManId, $deliveryName) = explode('|', $request->delivery_info);
 
         $orderCode = $request->order_code;
         $status = $request->status;
-        $deliveryManId = $request->delivery_man_id;
 
         Order::where('order_code', $orderCode)
             ->update([
                 'status' => $status,
+                'delivery_name' => $deliveryName,
                 'delivery_man_id' => $deliveryManId
             ]);
 

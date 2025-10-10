@@ -38,6 +38,7 @@
                                     <th>Payment</th>
                                     <th>Status</th>
                                     <th>Order Date</th>
+                                    <th>Delivery Name</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -66,6 +67,7 @@
                                                 @endif
                                             </td>
                                             <td>{{ ($order->created_at ?? now())->format('Y-m-d H:i') }}</td>
+                                            <td>{{ $order->delivery_name }}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm" role="group">
                                                     <a href="{{route('admin#orderDetail', $order->order_code)}}" class="btn btn-outline-secondary" title="View Details"><i class="fas fa-eye"></i></a>
