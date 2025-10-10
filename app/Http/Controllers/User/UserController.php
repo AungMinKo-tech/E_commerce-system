@@ -27,8 +27,9 @@ class UserController extends Controller
     {
         $categories = Category::all();
 
-        $products = Product::select('products.*', 'categories.name as category_name')
+        $products = Product::select('products.*', 'categories.name as category_name', 'ratings.count')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('ratings', 'products.id', 'ratings.product_id')
             ->get();
 
         $wishlistProductIds = [];
@@ -39,7 +40,15 @@ class UserController extends Controller
                 ->toArray();
         }
 
-        return view('user.home.list', compact('categories', 'products', 'wishlistProductIds'));
+        $topSellings = Product::select('products.*')
+            ->join('orders', 'products.id', '=', 'orders.product_id')
+            ->selectRaw('SUM(orders.count) as total_sold')
+            ->groupBy('products.id')
+            ->orderByDesc('total_sold')
+            ->take(8)
+            ->get();
+
+        return view('user.home.list', compact('categories', 'products', 'wishlistProductIds', 'topSellings'));
     }
 
     //wish list
@@ -227,10 +236,11 @@ class UserController extends Controller
     }
 
     //orderlist tmp
-    public function tmpOrder(Request $request){
+    public function tmpOrder(Request $request)
+    {
         $tmpOrder = [];
 
-        foreach($request->all() as $item){
+        foreach ($request->all() as $item) {
             array_push($tmpOrder, [
                 'user_id' => $item['userId'],
                 'product_id' => $item['productId'],
@@ -252,7 +262,8 @@ class UserController extends Controller
     }
 
     //direct checkout page
-    public function checkOutPage(){
+    public function checkOutPage()
+    {
         $payments = Payment::select('id', 'account_number', 'account_name', 'account_type')->get();
         $tmpOrder = Session::get('tmpCart');
         $discount = Session::get('discount');
@@ -263,7 +274,8 @@ class UserController extends Controller
     }
 
     //apply voucher
-    public function applyVoucher(Request $request){
+    public function applyVoucher(Request $request)
+    {
 
         $userId = Auth::user()->id; //login user id
         $voucherCode = Voucher::where('voucher_code', $request->voucher_code)->first();
@@ -272,14 +284,14 @@ class UserController extends Controller
             ->where('payment_histories.voucher_code', $request->voucher_code)
             ->first();
 
-        if($alreadyUsed){
+        if ($alreadyUsed) {
             return response()->json([
-                'status'=> 'error',
+                'status' => 'error',
                 'message' => 'Voucher code is already used!'
             ], 400);
         }
 
-        if(!$voucherCode){
+        if (!$voucherCode) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Voucher code is invalid'
@@ -287,7 +299,7 @@ class UserController extends Controller
         }
 
         //check expiry date
-        if($voucherCode->end_date < now()){
+        if ($voucherCode->end_date < now()) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Voucher code has expired'
@@ -295,7 +307,7 @@ class UserController extends Controller
         }
 
         //check usage limit
-        if($voucherCode->use_count >= $voucherCode->max_usage){
+        if ($voucherCode->use_count >= $voucherCode->max_usage) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Voucher code usage limit reached'
@@ -305,7 +317,7 @@ class UserController extends Controller
         $finalAmount = $request->totalAmount - $voucherCode->voucher_price;
 
         // Ensure final amount doesn't go below 0
-        if($finalAmount < 0){
+        if ($finalAmount < 0) {
             $finalAmount = 0;
         }
 
@@ -322,7 +334,8 @@ class UserController extends Controller
     }
 
     //redirect category page
-    public function category(Request $request){
+    public function category(Request $request)
+    {
         $categories = Category::all();
         $productsQuery = Product::query();
 

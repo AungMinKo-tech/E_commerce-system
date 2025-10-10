@@ -92,7 +92,6 @@ class ProductController extends Controller
         Alert::success('Title', 'Product Deleted Successfully!');
 
         return back();
-
     }
 
     //edit page view
