@@ -10,6 +10,10 @@
 <li>Payment Info</li>
 <li>Delivery Management</li>
 
+## Techstack
+<li>Html, CSS, Javascript, Bootstrap, JQuery</li>
+<li>PHP/Laravel</li>
+
 ## Admin Dashboard
 <img src="public/default/admin_dashboard.png" width="600"> 
 

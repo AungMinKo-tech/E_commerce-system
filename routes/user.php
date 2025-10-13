@@ -46,4 +46,8 @@ Route::group(['prefix'=>'user', 'middleware' => 'userMiddleware'], function(){
 
     //about static page
     Route::view('about', 'user.home.about')->name('user#about');
+
+    //contact page
+    Route::get('/contact', [UserController::class, 'contact'])->name('user#contact');
+    Route::post('/contactForm', [UserController::class, 'contactForm'])->name('user#contactForm');
 });

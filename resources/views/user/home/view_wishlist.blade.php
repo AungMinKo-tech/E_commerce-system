@@ -28,9 +28,6 @@
                                     <h3 class="product-name"><a href="#">{{ $product->name }}</a></h3>
                                     <h4 class="product-price">MMK {{ $product->price }}</h4>
                                 </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
                             </div>
                         </div>
                     @endforeach

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Contact;
 use App\Models\PaymentHistories;
 use App\Models\User;
 use App\Models\Color;
@@ -144,7 +145,6 @@ class AdminController extends Controller
 
         //delivery delete
         if ($request->role == 'delivery') {
-            // Prefer the related user_id from the delivery_mans row to avoid ambiguity with joined id
             $userId = $request->user_id;
             $user = $userId ? User::find($userId) : null;
 
@@ -308,6 +308,15 @@ class AdminController extends Controller
         return view('admin.saleInfo.sale', compact('months', 'salesData', 'totalSales', 'totalOrders', 'totalCustomers', 'topSelling'));
     }
 
+    //message
+    public function message() {
+        $message = Contact::select('contacts.message', 'users.name', 'users.phone', 'users.address', 'users.city', 'contacts.id')
+                ->leftJoin('users', 'contacts.user_id', '=', 'users.id')
+                ->get();
+
+        return view('admin.home.message', compact('message'));
+    }
+
     //check admin validate
     private function checkAdminValidate(Request $request)
     {
@@ -331,8 +340,8 @@ class AdminController extends Controller
             'address.required' => 'လိပ်စာ လိုအပ်ပါသည်။',
             'documents.required' => 'စာရွက်စာတမ်းလိုအပ်သည်။'
         ]);
-
     }
+
     //get admin data
     private function getAdminData(Request $request)
     {

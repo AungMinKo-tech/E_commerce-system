@@ -94,21 +94,24 @@ class OrderController extends Controller
         // dd($request->all());
         $request->validate([
             'order_code' => 'required|string',
-            'status' => 'required|integer|in:0,1,2,3,4',
+            'status' => 'required|integer|in:1,2,3,4',
             'delivery_info' => 'nullable|string'
         ]);
 
-        list($deliveryManId, $deliveryName) = explode('|', $request->delivery_info);
+        $orderData = [
+            'status' => $request->status,
+        ];
+
+        if($request->delivery_info) {
+            list($deliveryManId, $deliveryName) = explode('|', $request->delivery_info);
+            $orderData['delivery_name'] = $deliveryName;
+            $order['delivery_man_id'] = $deliveryManId;
+        }
 
         $orderCode = $request->order_code;
-        $status = $request->status;
 
-        Order::where('order_code', $orderCode)
-            ->update([
-                'status' => $status,
-                'delivery_name' => $deliveryName,
-                'delivery_man_id' => $deliveryManId
-            ]);
+        $order = Order::where('order_code', $orderCode);
+        $order->update($orderData);
 
         return redirect()->route('admin#orderDetail', $orderCode)
             ->with('success', 'Order status updated successfully!');

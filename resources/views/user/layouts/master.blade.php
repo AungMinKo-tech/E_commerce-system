@@ -156,7 +156,7 @@
                     <li class="{{request()->routeIs('user#home') ? 'active' : ''}}"><a href="{{ route('user#home') }}">Home</a></li>
                     <li class="{{request()->routeIs('user#categoryPage') ? 'active' : ''}}"><a href="{{route('user#categoryPage')}}">Categories</a></li>
                     <li class="{{request()->routeIs('user#about') ? 'active' : ''}}"><a href="{{route('user#about')}}">About Us</a></li>
-                    <li class="{{request()->routeIs('user#contact') ? 'active' : ''}}"><a href="#">Contact</a></li>
+                    <li class="{{request()->routeIs('user#contact') ? 'active' : ''}}"><a href="{{ route('user#contact') }}">Contact</a></li>
                 </ul>
                 <!-- /NAV -->
             </div>

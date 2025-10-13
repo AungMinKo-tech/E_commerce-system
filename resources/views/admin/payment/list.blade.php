@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Account Number</label>
+                            <label class="form-label fw-semibold">Account Type</label>
                             <input type="text" name="account_type" class="form-control @error('account_type') is-invalid @enderror" placeholder="e.g., KBZ Pay">
                             @error('account_type')
                                 <div class="invalid-feedback">

@@ -31,8 +31,6 @@
     <link rel="stylesheet" href="{{ asset('admin/assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/css/plugins.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin/assets/css/kaiadmin.min.css') }}" />
-
-    <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('admin/assets/css/demo.css') }}" />
 </head>
 
@@ -218,6 +216,9 @@
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li>
+                                <a href="{{ route('admin#message') }}"><i class="fa fa-envelope"></i></a>
+                            </li>
 
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"

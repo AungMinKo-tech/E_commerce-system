@@ -36,7 +36,7 @@
     <!-- About End -->
 
     <!-- Services Start -->
-    <div class="container-fluid py-5" style="margin-top: 20px">
+    <div class="container-fluid py-5" style="margin-top: 50px; margin-bottom: 50px;">
         <div class="container">
             <div class="text-center mb-5 mt-3">
                 <h1 class="mb-3">Why Choose Us</h1>
@@ -74,82 +74,4 @@
         </div>
     </div>
     <!-- Services End -->
-
-
-    <!-- Team Start -->
-    <div class="container-fluid py-5" style="margin-top: 50px; margin-bottom: 50px;">
-        <div class="container">
-            <div class="text-center mx-auto mb-5">
-                <h1 class="mb-3">Meet Our Team</h1>
-                <p>The dedicated individuals who work tirelessly to bring you the best products and services.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" src="{{ asset('user/img/team-1.jpg') }}" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fa fa-twitter"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-facebook-f"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">John Doe</h5>
-                            <small>Founder & CEO</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" src="{{ asset('user/img/team-2.jpg') }}" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fa fa-twitter"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-facebook-f"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Jane Smith</h5>
-                            <small>Chief Operating Officer</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" src="{{ asset('user/img/team-3.jpg') }}" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fa fa-twitter"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-facebook-f"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Peter Jones</h5>
-                            <small>Head of Marketing</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="team-item">
-                        <div class="position-relative overflow-hidden">
-                            <img class="img-fluid" src="{{ asset('user/img/team-4.jpg') }}" alt="">
-                            <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fa fa-twitter"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-facebook-f"></i></a>
-                                <a class="btn btn-square" href=""><i class="fa fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                        <div class="text-center p-4">
-                            <h5 class="mb-0">Mary Brown</h5>
-                            <small>Customer Support Lead</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Team End -->
 @endsection

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\Cart;
-use App\Models\Order;
+use App\Models\Contact;
 use App\Models\PaymentHistories;
 use App\Models\Rating;
 use App\Models\Comment;
@@ -14,10 +14,10 @@ use App\Models\Category;
 use App\Models\Wishlist;
 use App\Models\ProductColor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
@@ -357,5 +357,30 @@ class UserController extends Controller
         $products = $productsQuery->get();
 
         return view('user.home.category', compact('categories', 'products'));
+    }
+
+    //redirect contact page
+    public function contact()
+    {
+        return view('user.home.contact');
+    }
+
+    //message create
+    public function contactForm(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'message' => 'required|string|max:255'
+        ]);
+
+        Contact::create([
+            'user_id' => $request->user_id,
+            'message' => $request->message
+        ]);
+
+        Alert::success('Successful', 'Message sent successfully!');
+
+        return back();
     }
 }
