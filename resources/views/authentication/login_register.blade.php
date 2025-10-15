@@ -58,7 +58,6 @@
                 @csrf
                 <h1>Sign in</h1>
                 <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
                     <a href="{{route('socialLogin', 'google')}}" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="{{route('socialLogin', 'github')}}" class="social"><i class="fab fa-github"></i></a>
                 </div>
@@ -76,7 +75,7 @@
 
                     <br>
 
-                    <a href="#">Forgot your password?</a><br>
+                    <a href="{{ route('password.request') }}">Forgot your password?</a><br>
 
                     <button type="submit" class="mt-3">Sign In</button>
                 </div>

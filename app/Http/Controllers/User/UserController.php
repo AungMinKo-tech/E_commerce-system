@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
@@ -30,6 +29,9 @@ class UserController extends Controller
         $products = Product::select('products.*', 'categories.name as category_name', 'ratings.count')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('ratings', 'products.id', 'ratings.product_id')
+            ->when(request('categoryId'), function($query) {
+                $query->where('products.category_id', request('categoryId'));
+            })
             ->get();
 
         $wishlistProductIds = [];
@@ -382,5 +384,10 @@ class UserController extends Controller
         Alert::success('Successful', 'Message sent successfully!');
 
         return back();
+    }
+
+    //coming soon
+    public function comingSoon() {
+        return view('authentication.coming');
     }
 }

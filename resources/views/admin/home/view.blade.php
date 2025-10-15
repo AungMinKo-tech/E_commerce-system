@@ -106,21 +106,6 @@
                                     </a>
                                 </div>
 
-                                <!-- Admin Search and Filter -->
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search admins..."
-                                                id="adminSearchInput">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- Admin Table -->
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover" id="adminTable">
@@ -196,27 +181,6 @@
                                     <a href="{{ route('admin#newDeliveryPage') }}" class="btn btn-primary btn-round">
                                         <i class="fa fa-plus"></i> Add New Delivery Man
                                     </a>
-                                </div>
-
-                                <!-- Delivery Search and Filter -->
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control"
-                                                placeholder="Search delivery personnel..." id="deliverySearchInput">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <button class="btn btn-outline-info btn-block" id="exportDeliveryBtn">
-                                            <i class="fa fa-download"></i> Export
-                                        </button>
-                                    </div>
                                 </div>
 
                                 <!-- Delivery Table -->
@@ -299,27 +263,6 @@
                                     </button>
                                 </div>
 
-                                <!-- User Search and Filter -->
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search users..."
-                                                id="userSearchInput">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <button class="btn btn-outline-info btn-block" id="exportUserBtn">
-                                            <i class="fa fa-download"></i> Export
-                                        </button>
-                                    </div>
-                                </div>
-
                                 <!-- User Table -->
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover" id="userTable">
@@ -331,7 +274,6 @@
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Join Date</th>
-                                                <th>Total Orders</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -347,7 +289,6 @@
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->phone }}</td>
                                                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
-                                                    <td>45</td>
                                                     @if (Auth::user()->role == "owner")
                                                         <td>
                                                             <div class="btn-group" role="group">
@@ -358,9 +299,6 @@
                                                                     </button>
                                                                 </form>
 
-                                                                <button type="button" class="btn btn-sm btn-success" title="Orders">
-                                                                    <i class="fa fa-shopping-cart"></i>
-                                                                </button>
                                                                 <form action="{{ route('admin#delete') }}" method="POST">
                                                                     @csrf
                                                                     <input type="hidden" name="id" value="{{$user->id}}">

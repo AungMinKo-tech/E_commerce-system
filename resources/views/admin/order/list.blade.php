@@ -5,11 +5,6 @@
         <div class="page-inner">
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="fw-bold mb-0">Order Board</h3>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary" id="btn-export-csv">
-                        <i class="fas fa-file-csv me-1"></i>Export CSV
-                    </button>
-                </div>
             </div>
 
             <div class="card">

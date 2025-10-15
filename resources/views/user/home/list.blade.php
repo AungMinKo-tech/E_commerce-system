@@ -14,8 +14,12 @@
                         <h3 class="title">New Products</h3>
                         <div class="section-nav">
                             <ul class="section-tab-nav tab-nav">
+                                <li><a class="@if(!request('categoryId')) active @endif" href="{{ url('user/home') }}">All
+                                        Product</a></li>
                                 @foreach ($categories as $category)
-                                    <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
+                                    <li><a class="@if($category->id == request('categoryId')) active @endif"
+                                            href="{{ url('user/home?categoryId=' . $category->id) }}">{{ $category->name }}</a>
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -111,15 +115,8 @@
 
                         <!-- section title -->
                         <div class="col-md-12">
-                            <div class="section-title">
+                            <div class="section-title text-center">
                                 <h3 class="title">🔥 Top Selling Products</h3>
-                                <div class="section-nav">
-                                    <ul class="section-tab-nav tab-nav">
-                                        @foreach ($categories as $category)
-                                            <li class=""><a data-toggle="tab" href="#tab1">{{ $category->name }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                         <!-- /section title -->
