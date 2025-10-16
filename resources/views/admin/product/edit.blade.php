@@ -110,9 +110,20 @@
                                             <div class="col-12">
                                                 <label for="description" class="form-label fw-semibold">Description</label>
                                                 <textarea id="description" class="form-control @error('description') is-invalid @enderror"
-                                                          rows="4" placeholder="Write a detailed description of the product..."
+                                                          rows="4" placeholder="Description of the product..."
                                                           name="description">{{ old('description', $product->description) }}</textarea>
                                                 @error('description')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Details -->
+                                            <div class="col-12">
+                                                <label for="detail" class="form-label fw-semibold">Detail</label>
+                                                <textarea id="detail" class="form-control @error('detail') is-invalid @enderror"
+                                                          rows="4" placeholder="Detail of the product..."
+                                                          name="detail">{{ old('detail', $product->detail) }}</textarea>
+                                                @error('detail')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
