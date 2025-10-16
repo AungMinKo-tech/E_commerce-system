@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\SocialLoginController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +12,15 @@ require_once __DIR__.'/delivery.php';
 // Smart root route that redirects based on authentication and role
 Route::get('/', function () {
     if (Auth::check()) {
-        if (Auth::user()->role == 'admin' || Auth::user()->role == 'owner' || Auth::user()->role == 'delivery') {
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'owner') {
             return redirect()->route('admin#dashboard');
-        } else {
+        }
+
+        if (Auth::user()->role == 'delivery') {
+            return redirect()->route('delivery#home');
+        }
+
+        if(Auth::user()->role == 'user') {
             return redirect()->route('user#home');
         }
     }

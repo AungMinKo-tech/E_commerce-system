@@ -33,29 +33,29 @@
                 </thead>
                 <tbody>
                     @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->nickname }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>
-                            @if($user->role == 'admin' || $user->role == 'delivery' || $user->role == 'owner')
-                            <span class="badge bg-danger">{{ $user->role }}</span>
-                            @else
-                            <span class="badge bg-primary">user</span>
-                            @endif
-                        </td>
-                        <td>{{ $user->created_at->format('M d, Y') }}</td>
-                        <td>
-                            <a href="{{ route('admin#userDetail', $user->id) }}" class="btn btn-sm btn-info">View</a>
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->nickname }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                @if($user->role == 'admin' || $user->role == 'delivery' || $user->role == 'owner')
+                                    <span class="badge bg-danger">{{ $user->role }}</span>
+                                @else
+                                    <span class="badge bg-primary">user</span>
+                                @endif
+                            </td>
+                            <td>{{ $user->created_at->format('M d, Y') }}</td>
+                            <td>
+                                <a href="{{ route('admin#userDetail', $user->id) }}" class="btn btn-sm btn-info">View</a>
 
-                            <form action="{{ route('admin#deleteUser') }}" method="POST" class="d-inline">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $user->id }}">
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                                <form action="{{ route('admin#deleteUser') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $user->id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

@@ -176,7 +176,6 @@
                                         <option value="1" {{ ($currentStatus === 1) ? 'selected' : '' }}>Accept</option>
                                         <option value="2" {{ ($currentStatus === 2) ? 'selected' : '' }}>Shipping</option>
                                         <option value="3" {{ ($currentStatus === 3) ? 'selected' : '' }}>Reject</option>
-                                        <option value="4" {{ ($currentStatus === 4) ? 'selected' : '' }}>Delivered</option>
                                     </select>
                                 </div>
 

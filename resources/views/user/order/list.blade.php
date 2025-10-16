@@ -154,7 +154,7 @@
                                                 <div class="col-md-4 text-right">
                                                     <div class="order-total">
                                                         @if ($firstOrder->voucher_code)
-                                                            <h4 class="text-success font-weight-bold">{{ $firstOrder->total_amount }} MMK</h4>
+                                                            <h4 class="text-success font-weight-bold">{{ $firstOrder->total_amount }}</h4>
                                                             <small class="text-muted">Original: {{ number_format($totalAmount) }} MMK</small>
                                                         @else
                                                             <h4 class="text-primary font-weight-bold">{{ number_format($totalAmount) }} MMK</h4>

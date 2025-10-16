@@ -83,8 +83,6 @@
                                         </td>
                                         <td>
                                             <div class="fw-semibold text-primary">MMK {{ $item->price }}</div>
-                                            {{-- <small class="text-muted text-decoration-line-through">MMK 2,800,000</small>
-                                            --}}
                                         </td>
                                         <td>
                                             <div class="position-relative d-inline-block" style="width: 80px; height: 40px;">
@@ -112,7 +110,9 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <form action="{{ route('admin#detailsProduct', $item->product_id) }}" method="GET">
+                                                <form
+                                                    action="{{ route('admin#detailsProduct', ['id' => $item->product_id, 'colorId' => $item->color_id]) }}"
+                                                    method="GET">
 
                                                     <button type="submit" class="btn btn-sm btn-outline-primary" title="Edit">
                                                         <i class="fas fa-eye"></i>

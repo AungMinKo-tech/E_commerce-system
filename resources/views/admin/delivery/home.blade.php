@@ -7,7 +7,7 @@
         <div class="content">
             <div class="page-inner">
                 <div class="page-header">
-                    <h4 class="page-title">Delivery Dashboard</h4>
+                    <h4 class="page-title">Pending Delivery List</h4>
                 </div>
 
                 @if (session('message'))
@@ -60,7 +60,7 @@
                                                 <th>City</th>
                                                 <th>Phone</th>
                                                 <th>Order Note</th>
-                                                <th>Delievered Time</th>
+                                                <th>Assignment Time</th>
                                             </tr>
                                         </thead>
                                         <tbody>

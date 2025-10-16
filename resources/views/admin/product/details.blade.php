@@ -11,16 +11,13 @@
                     <a href="{{ route('admin#productList') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i>Back to List
                     </a>
-                    <a href="{{ route('admin#editProduct', $product->id) }}" class="btn btn-primary">
-                        <i class="fas fa-edit me-2"></i>Edit Product
-                    </a>
                 </div>
             </div>
 
             <!-- Product Details Card -->
             <div class="row">
                 <!-- Product Image and Basic Info -->
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -75,51 +72,7 @@
                                                 </div>
                                             @endif
                                         </div>
-
-
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Statistics -->
-                <div class="col-lg-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-chart-bar me-2"></i>Product Statistics
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="stat-item mb-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">Orders</span>
-                                    <span class="fw-bold">89</span>
-                                </div>
-                                <div class="progress mt-1" style="height: 6px;">
-                                    <div class="progress-bar bg-success" style="width: 60%"></div>
-                                </div>
-                            </div>
-
-                            <div class="stat-item mb-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">Revenue</span>
-                                    <span class="fw-bold">MMK 2.5M</span>
-                                </div>
-                                <div class="progress mt-1" style="height: 6px;">
-                                    <div class="progress-bar bg-warning" style="width: 85%"></div>
-                                </div>
-                            </div>
-
-                            <div class="stat-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="text-muted">Rating</span>
-                                    <span class="fw-bold">4.5 ⭐</span>
-                                </div>
-                                <div class="progress mt-1" style="height: 6px;">
-                                    <div class="progress-bar bg-info" style="width: 90%"></div>
                                 </div>
                             </div>
                         </div>

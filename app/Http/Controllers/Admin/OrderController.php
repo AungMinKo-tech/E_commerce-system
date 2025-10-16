@@ -74,8 +74,8 @@ class OrderController extends Controller
             ->get();
 
         $deliveryMans = DeliveryMans::select('users.name as delivery_name', 'delivery_mans.id')
-                    ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
-                    ->get();
+            ->leftJoin('users', 'delivery_mans.user_id', '=', 'users.id')
+            ->get();
 
         $userId = Order::where('order_code', $order_code)->value('user_id');
         $shipping = null;
@@ -89,9 +89,9 @@ class OrderController extends Controller
     }
 
     //accept shipping reject order
-    public function confirmOrder(Request $request){
+    public function confirmOrder(Request $request)
+    {
 
-        // dd($request->all());
         $request->validate([
             'order_code' => 'required|string',
             'status' => 'required|integer|in:1,2,3,4',
@@ -102,10 +102,10 @@ class OrderController extends Controller
             'status' => $request->status,
         ];
 
-        if($request->delivery_info) {
+        if ($request->delivery_info) {
             list($deliveryManId, $deliveryName) = explode('|', $request->delivery_info);
             $orderData['delivery_name'] = $deliveryName;
-            $order['delivery_man_id'] = $deliveryManId;
+            $orderData['delivery_man_id'] = $deliveryManId;
         }
 
         $orderCode = $request->order_code;
@@ -115,5 +115,31 @@ class OrderController extends Controller
 
         return redirect()->route('admin#orderDetail', $orderCode)
             ->with('success', 'Order status updated successfully!');
+    }
+
+    //delivered Order
+    public function deliveryOrder()
+    {
+        $deliveredList = Order::select(
+            'orders.order_code',
+            \DB::raw('MAX(delivery_mans.user_id) as user_id'),
+            \DB::raw('MAX(users.name) as delivery_name'),
+            \DB::raw('MAX(shipping_addresses.name) as shipping_name'),
+            \DB::raw('MAX(shipping_addresses.email) as shipping_email'),
+            \DB::raw('MAX(shipping_addresses.address) as shipping_address'),
+            \DB::raw('MAX(shipping_addresses.city) as shipping_city'),
+            \DB::raw('MAX(shipping_addresses.phone) as shipping_phone'),
+            \DB::raw('MAX(shipping_addresses.order_note) as order_note'),
+            \DB::raw('MAX(orders.created_at) as created_at'),
+            \DB::raw('MAX(orders.updated_at) as updated_at')
+        )
+            ->join('delivery_mans', 'delivery_mans.id', '=', 'orders.delivery_man_id')
+            ->join('shipping_addresses', 'shipping_addresses.order_code', '=', 'orders.order_code')
+            ->join('users', 'users.id', '=', 'delivery_mans.user_id')
+            ->where('status', 4)
+            ->groupBy('orders.order_code')
+            ->get();
+
+        return view("admin.delivery.list", compact("deliveredList"));
     }
 }

@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
-use App\Models\Product_Color;
 use App\Models\ProductColor;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -17,7 +15,7 @@ class ProductController extends Controller
     //redirect product list page
     public function listProduct($action = "default")
     {
-        $products = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'products.detail', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at')
+        $products = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'products.detail', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at', 'colors.id as color_id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('product_colors', 'products.id', '=', 'product_colors.product_id')
             ->leftJoin('colors', 'product_colors.color_id', '=', 'colors.id')
@@ -150,7 +148,7 @@ class ProductController extends Controller
                 'color_id' => $request->color_id,
                 'stock' => $request->stock
             ]);
-        }else{
+        } else {
             $existingProductColor->update([
                 'stock' => $request->stock
             ]);
@@ -162,16 +160,21 @@ class ProductController extends Controller
     }
 
     //redirect details page
-    public function detailsProduct($id){
-        $product = Product::where('products.id', $id)
-            ->leftJoin('product_colors', 'products.id', '=', 'product_colors.product_id')
+    public function detailsProduct($id, $colorId)
+    {
+        $product = ProductColor::where([
+            ['product_id', '=', $id],
+            ['color_id', '=', $colorId]
+        ])
+            ->leftJoin('products', 'product_colors.product_id', '=', 'products.id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('colors', 'product_colors.color_id', '=', 'colors.id')
             ->select(
                 'products.*',
                 'categories.name as category_name',
                 'colors.name as color_name',
-                'product_colors.stock'
+                'product_colors.stock',
+                'product_colors.color_id'
             )
             ->first();
 

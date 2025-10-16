@@ -31,7 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::post('deleteProduct', [ProductController::class,'deleteProduct'])->name('admin#deleteProduct');
         Route::get('editProduct/{id}', [ProductController::class,'editProduct'])->name('admin#editProduct');
         Route::post('updateProduct', [ProductController::class,'updateProduct'])->name('admin#updateProduct');
-        Route::get('details/{id}', [ProductController::class,'detailsProduct'])->name('admin#detailsProduct');
+        Route::get('details/{id}/{colorId}', [ProductController::class,'detailsProduct'])->name('admin#detailsProduct');
     });
 
     //color
@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
         Route::get('orderList', [OrderController::class, 'orderList'])->name('admin#orderList');
         Route::get('detail/{order_code}', [OrderController::class,'orderDetail'])->name('admin#orderDetail');
         Route::post('confirmOrder', [OrderController::class,'confirmOrder'])->name('admin#confirmOrder');
+        Route::get('deliveredOrder', [OrderController::class, 'deliveryOrder'])->name('admin#delivered');
     });
 
     //wishlist

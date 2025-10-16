@@ -27,7 +27,7 @@
                         <!-- Billing Details -->
                         <div class="billing-details">
                             <div class="section-title">
-                                <h3 class="title">Billing address</h3>
+                                <h3 class="title">Shipping address</h3>
                             </div>
 
                             <div class="form-group">

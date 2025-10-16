@@ -16,17 +16,19 @@ class AuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check()){
+        if (Auth::check()) {
             // If user is authenticated and trying to access login/register, redirect based on role
-            if($request->route()->getName() == 'login' || $request->route()->getName() == 'register') {
-                if(Auth::user()->role == 'admin' || Auth::user()->role == 'owner' || Auth::user()->role == 'delivery') {
+            if ($request->route()->getName() == 'login' || $request->route()->getName() == 'register') {
+                if (Auth::user()->role == 'admin' || Auth::user()->role == 'owner') {
                     return redirect()->route('admin#dashboard');
+                } elseif (Auth::user()->role == 'delivery') {
+                    return redirect()->route('delivery#home');
                 } else {
                     return redirect()->route('user#home');
                 }
             }
             return $next($request);
-        }else{
+        } else {
             return $next($request);
         }
     }

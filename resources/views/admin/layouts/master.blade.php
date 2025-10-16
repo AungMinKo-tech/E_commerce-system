@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Admin Dashboard</title>
+    <title>@yield('title', 'Admin Dashboard')</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -129,7 +129,7 @@
                             @endif
 
                             <li class="nav-item">
-                                <a href="{{ route('delivery#delivered') }}">
+                                <a href="{{ route('admin#delivered') }}">
                                     <i class="fas fa-layer-group"></i>
                                     <p>Delivered Order</p>
                                 </a>
@@ -166,14 +166,14 @@
                             <li class="nav-item">
                                 <a href="{{ route('delivery#home') }}">
                                     <i class="fas fa-home"></i>
-                                    <p>Delivery List</p>
+                                    <p>Pending Delivery List</p>
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a href="{{ route('delivery#delivered') }}">
                                     <i class="fas fa-layer-group"></i>
-                                    <p>Delivered Order</p>
+                                    <p>My Delivered</p>
                                 </a>
                             </li>
                         </ul>
@@ -216,9 +216,11 @@
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                            <li>
-                                <a href="{{ route('admin#message') }}"><i class="fa fa-envelope"></i></a>
-                            </li>
+                            @if (Auth::user()->role != 'delivery')
+                                <li>
+                                    <a href="{{ route('admin#message') }}"><i class="fa fa-envelope"></i></a>
+                                </li>
+                            @endif
 
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
@@ -394,4 +396,5 @@
 
     @yield('script')
 </body>
+
 </html>

@@ -86,7 +86,7 @@
                                             <div class="form-group">
                                                 <label for="nickname" class="form-label">Nickame</label>
                                                 <input type="text" class="form-control @error('nickname') is-invalid @enderror"
-                                                    id="nickname" nickname="nickname" value="{{ old('nickname', Auth::user()->nickname) }}"
+                                                    id="nickname" name="nickname" value="{{ old('nickname', Auth::user()->nickname) }}"
                                                     placeholder="Enter your full nickname">
                                                 @error('nickname')
                                                     <div class="invalid-feedback">{{ $message }}</div>

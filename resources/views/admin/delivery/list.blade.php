@@ -1,6 +1,8 @@
 @extends('admin.layouts.master')
 
-@section('title', 'Delivered List')
+@if (Auth::user()->role == 'delivery')
+    @section('title', 'Deliverey Dashboard')
+@endif
 
 @section('content')
     <div class="container">

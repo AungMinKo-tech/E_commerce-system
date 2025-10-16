@@ -194,7 +194,6 @@
                                                 <th>Phone</th>
                                                 <th>Vehicle</th>
                                                 <th>Zone</th>
-                                                <th>Total Deliveries</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -211,7 +210,6 @@
                                                     <td>{{ $delivery->phone }}</td>
                                                     <td><span class="badge badge-info">{{ $delivery->vehicle }}</span></td>
                                                     <td>{{ $delivery->delivery_zone }}</td>
-                                                    <td>156</td>
                                                     @if (Auth::user()->role == "owner")
                                                         <td>
                                                             <div class="btn-group" role="group">
@@ -258,9 +256,6 @@
                             <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="card-title">Regular User Management</h5>
-                                    <button class="btn btn-primary btn-round" id="addUserBtn">
-                                        <i class="fa fa-plus"></i> Add New User
-                                    </button>
                                 </div>
 
                                 <!-- User Table -->

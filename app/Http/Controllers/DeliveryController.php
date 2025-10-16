@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Delivery;
-use App\Models\DeliveryMans;
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -50,6 +47,8 @@ class DeliveryController extends Controller
 
     //view delievered order
     public function viewDelivered(){
+        $deliveryMan = Auth::user()->name;
+
         $deliveredList = Order::select(
                 'orders.order_code',
                 \DB::raw('MAX(delivery_mans.user_id) as user_id'),
@@ -67,6 +66,7 @@ class DeliveryController extends Controller
             ->join('shipping_addresses', 'shipping_addresses.order_code', '=', 'orders.order_code')
             ->join('users', 'users.id', '=', 'delivery_mans.user_id')
             ->where('status', 4) // 4 = delivered
+            ->where('delivery_name', $deliveryMan)
             ->groupBy('orders.order_code')
             ->get();
 

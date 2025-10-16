@@ -116,7 +116,7 @@ class ProfileController extends Controller
             'name'=> 'required',
             'email' => 'required|unique:users,email,'. Auth::user()->id,
             'phone' => 'required',
-            'nickname' => '',
+            'nickname' => 'nullable',
             'date_of_birth' => '',
             'address' => 'min:5',
             'city' => 'required',
