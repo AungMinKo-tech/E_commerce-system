@@ -126,7 +126,7 @@
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mt-4">
-                                    <a href="#" class="btn btn-secondary">
+                                    <a href="{{ route('admin#viewProfile') }}" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left me-1"></i> Back to Profile
                                     </a>
                                     <div>

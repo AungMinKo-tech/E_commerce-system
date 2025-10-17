@@ -66,6 +66,7 @@
                                     <th>Account Number</th>
                                     <th>Type</th>
                                     <th>Created Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,6 +77,15 @@
                                         <td>{{ $payment->account_number }}</td>
                                         <td>{{ $payment->account_type }}</td>
                                         <td>{{ $payment->created_at->format('d-m-Y') }}</td>
+                                        <td>
+                                            <form action="{{ route('admin#paymentDelete') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="payment_id" value="{{ $payment->id }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 @else

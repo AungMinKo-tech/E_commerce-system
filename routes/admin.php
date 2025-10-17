@@ -9,6 +9,15 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VoucherController;
 
+//profile
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('profile/changePassword', [ProfileController::class, 'changePassword'])->name('admin#changePassword');
+    Route::post('profile/updatePassword', [ProfileController::class, 'updatePassword'])->name('admin#updatePassword');
+    Route::get('profile/viewProfile', [ProfileController::class, 'view'])->name('admin#viewProfile');
+    Route::get('profile/editProfile', [ProfileController::class, 'editProfile'])->name('admin#editProfile');
+    Route::post('profile/updateProfile', [ProfileController::class, 'updateProfile'])->name('admin#updateProfile');
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin#dashboard');
     Route::get('/userDetail/{id}', [AdminController::class, 'userDetail'])->name('admin#userDetail');
@@ -16,55 +25,46 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
 
     //Category
     Route::group(['prefix' => 'category'], function () {
-            Route::get('list', [CategoryController::class, 'listCategory'])->name('admin#category');
-            Route::post('create', [CategoryController::class, 'categoryCreate'])->name('admin#categoryCreate');
-            Route::get('edit/{id}', [CategoryController::class, 'editCategory'])->name('admin#categoryEdit');
-            Route::post('update/{id}', [CategoryController::class, 'updateCategory'])->name('admin#categoryUpdate');
-            Route::get('delete/{id}', [CategoryController::class, 'deleteCategory'])->name('admin#categoryDelete');
-        });
+        Route::get('list', [CategoryController::class, 'listCategory'])->name('admin#category');
+        Route::post('create', [CategoryController::class, 'categoryCreate'])->name('admin#categoryCreate');
+        Route::get('edit/{id}', [CategoryController::class, 'editCategory'])->name('admin#categoryEdit');
+        Route::post('update/{id}', [CategoryController::class, 'updateCategory'])->name('admin#categoryUpdate');
+        Route::get('delete/{id}', [CategoryController::class, 'deleteCategory'])->name('admin#categoryDelete');
+    });
 
     //product
     Route::group(['prefix' => 'product'], function () {
-        Route::get('list/{action?}', [ProductController::class,'listProduct'])->name('admin#productList');
+        Route::get('list/{action?}', [ProductController::class, 'listProduct'])->name('admin#productList');
         Route::get('addProductPage', [ProductController::class, 'addProductPage'])->name('admin#addProductPage');
-        Route::post('createProduct', [ProductController::class,'createProduct'])->name('admin#createProduct');
-        Route::post('deleteProduct', [ProductController::class,'deleteProduct'])->name('admin#deleteProduct');
-        Route::get('editProduct/{id}', [ProductController::class,'editProduct'])->name('admin#editProduct');
-        Route::post('updateProduct', [ProductController::class,'updateProduct'])->name('admin#updateProduct');
-        Route::get('details/{id}/{colorId}', [ProductController::class,'detailsProduct'])->name('admin#detailsProduct');
+        Route::post('createProduct', [ProductController::class, 'createProduct'])->name('admin#createProduct');
+        Route::post('deleteProduct', [ProductController::class, 'deleteProduct'])->name('admin#deleteProduct');
+        Route::get('editProduct/{id}', [ProductController::class, 'editProduct'])->name('admin#editProduct');
+        Route::post('updateProduct', [ProductController::class, 'updateProduct'])->name('admin#updateProduct');
+        Route::get('details/{id}/{colorId}', [ProductController::class, 'detailsProduct'])->name('admin#detailsProduct');
     });
 
     //color
-    Route::group(['prefix'=> 'color'], function () {
-        Route::get('addColor', [AdminController::class,'addColor'])->name('admin#addColor');
+    Route::group(['prefix' => 'color'], function () {
+        Route::get('addColor', [AdminController::class, 'addColor'])->name('admin#addColor');
         Route::post('createColor', [AdminController::class, 'createColor'])->name('admin#createColor');
-        Route::get('delete/{id}', [AdminController::class,'deleteColor'])->name('admin#deleteColor');
-    });
-
-    //profile
-    Route::group(['prefix'=> 'profile'], function () {
-        Route::get('changePassword', [ProfileController::class,'changePassword'])->name('admin#changePassword');
-        Route::post('updatePassword', [ProfileController::class,'updatePassword'])->name('admin#updatePassword');
-        Route::get('viewProfile', [ProfileController::class,'view'])->name('admin#viewProfile');
-        Route::get('editProfile', [ProfileController::class,'editProfile'])->name('admin#editProfile');
-        Route::post('updateProfile', [ProfileController::class,'updateProfile'])->name('admin#updateProfile');
+        Route::get('delete/{id}', [AdminController::class, 'deleteColor'])->name('admin#deleteColor');
     });
 
     //order
-    Route::group(['prefix'=> 'order'], function () {
+    Route::group(['prefix' => 'order'], function () {
         Route::get('orderList', [OrderController::class, 'orderList'])->name('admin#orderList');
-        Route::get('detail/{order_code}', [OrderController::class,'orderDetail'])->name('admin#orderDetail');
-        Route::post('confirmOrder', [OrderController::class,'confirmOrder'])->name('admin#confirmOrder');
+        Route::get('detail/{order_code}', [OrderController::class, 'orderDetail'])->name('admin#orderDetail');
+        Route::post('confirmOrder', [OrderController::class, 'confirmOrder'])->name('admin#confirmOrder');
         Route::get('deliveredOrder', [OrderController::class, 'deliveryOrder'])->name('admin#delivered');
     });
 
     //wishlist
-    Route::get('wishListPage', [AdminController::class,'wishList'])->name('admin#wishListPage');
+    Route::get('wishListPage', [AdminController::class, 'wishList'])->name('admin#wishListPage');
 
     //list admin/delivery
-    Route::get('adminList', [AdminController::class,'adminList'])->name('admin#adminList');
-    Route::get('adminDetails/{id}', [AdminController::class,'adminDetails'])->name('admin#adminDetails');
-    Route::get('deliveryDetails/{id}', [AdminController::class,'deliveryDetails'])->name('admin#deliveryDetails');
+    Route::get('adminList', [AdminController::class, 'adminList'])->name('admin#adminList');
+    Route::get('adminDetails/{id}', [AdminController::class, 'adminDetails'])->name('admin#adminDetails');
+    Route::get('deliveryDetails/{id}', [AdminController::class, 'deliveryDetails'])->name('admin#deliveryDetails');
 
     //sale information
     Route::get('saleInfo', [AdminController::class, 'saleInfo'])->name('admin#saleInfo');
@@ -73,16 +73,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminMiddleware'], function 
     Route::get('message', [AdminController::class, 'message'])->name('admin#message');
 
     //add new admin and delivery
-    Route::group(['middleware'=> 'ownerMiddleware'], function () {
-        Route::get('newAdminPage', [AdminController::class,'newAdminPage'])->name('admin#newAdminPage');
-        Route::post('newAdmin', [AdminController::class,'newAdmin'])->name('admin#newAdmin');
-        Route::get('newDeliveryPage', [AdminController::class,'newDeliveryPage'])->name('admin#newDeliveryPage');
-        Route::post('newDelivery', [AdminController::class,'newDelivery'])->name('admin#newDelivery');
-        Route::post('adminDelete', [AdminController::class,'adminDelete'])->name('admin#delete');
+    Route::group(['middleware' => 'ownerMiddleware'], function () {
+        Route::get('newAdminPage', [AdminController::class, 'newAdminPage'])->name('admin#newAdminPage');
+        Route::post('newAdmin', [AdminController::class, 'newAdmin'])->name('admin#newAdmin');
+        Route::get('newDeliveryPage', [AdminController::class, 'newDeliveryPage'])->name('admin#newDeliveryPage');
+        Route::post('newDelivery', [AdminController::class, 'newDelivery'])->name('admin#newDelivery');
+        Route::post('adminDelete', [AdminController::class, 'adminDelete'])->name('admin#delete');
 
         //payment
-        Route::get('listPayment', [PaymentController::class,'listPayment'])->name('admin#listPayment');
-        Route::post('paymentCreate', [PaymentController::class,'paymentCreate'])->name('admin#paymentCreate');
+        Route::get('listPayment', [PaymentController::class, 'listPayment'])->name('admin#listPayment');
+        Route::post('paymentCreate', [PaymentController::class, 'paymentCreate'])->name('admin#paymentCreate');
+        Route::post('deletePayment', [PaymentController::class, 'delete'])->name('admin#paymentDelete');
 
         //voucher
         Route::group(['prefix' => 'voucher'], function () {

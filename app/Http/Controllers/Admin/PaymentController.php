@@ -32,6 +32,16 @@ class PaymentController extends Controller
         return back();
     }
 
+    //delete payment
+    public function delete(Request $request) {
+        // dd($request->toArray());
+        $payment = Payment::find($request->payment_id);
+
+        $payment->delete();
+
+        return back();
+    }
+
     //check validate payment data
     private function checkPayment($request){
         $request->validate([

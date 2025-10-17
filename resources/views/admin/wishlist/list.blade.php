@@ -98,13 +98,12 @@
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Added Date</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($wishlists as $wishlist)
                                     <tr>
-                                        <td><strong>#{{ $wishlist->id }}</strong></td>
+                                        <td><strong>{{ $wishlist->id }}</strong></td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar-sm me-2">
@@ -142,9 +141,6 @@
                                             <span class="badge badge-primary">{{ $wishlist->count ?? 1 }}</span>
                                         </td>
                                         <td>{{ $wishlist->created_at->format('M d, Y H:i') }}</td>
-                                        <td>
-                                            <span class="text-muted">No actions available</span>
-                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

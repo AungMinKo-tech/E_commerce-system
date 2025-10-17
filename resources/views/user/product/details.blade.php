@@ -62,8 +62,9 @@
                                 <h3 class="product-price">{{ $product->price }} MMK</h3>
                                 <span class="product-available">Stock |</span>
                                 @foreach ($colors as $item)
-                                    <span class="badge bg-secondary">{{ $item->color_name }} - {{ $item->stock }}</span>
-                                    <span></span>
+                                    @if ($item->stock != 0)
+                                        <span class="badge bg-secondary">{{ $item->color_name }} - {{ $item->stock }}</span>
+                                    @endif
                                 @endforeach
                             @endif
 
@@ -301,8 +302,6 @@
                                                 class="tooltipp"></span>
                                         </button>
                                     </form>
-                                    <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to
-                                            compare</span></button>
                                 </div>
                             </div>
                             <div class="add-to-cart">
