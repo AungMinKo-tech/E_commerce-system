@@ -140,11 +140,10 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
+                        <span class="d-flex justify-content-end mt-3">{{ $products->links() }}</span>
                     </div>
-                    <span class="d-flex justify-content-end mt-3">{{ $products->links() }}</span>
                 </div>
             </div>
         </div>
