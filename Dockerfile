@@ -1,26 +1,27 @@
 FROM php:8.2-cli
 
-# လိုအပ်တဲ့ system dependencies များ
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev
 
-# Node.js install လုပ်ခြင်း
-RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
+# Install Node.js (Version 20)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs
 
-# PHP Extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Composer
+# Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 COPY . .
 
-# PHP Dependencies install လုပ်ခြင်း
+# PHP Dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# NPM install လုပ်ပြီး Assets build ဆွဲခြင်း
+# NPM install & Build assets (CSS ပေါ်ဖို့အတွက်)
+# အကယ်၍ npm build error တက်ရင် ဒီ line ကို ခဏပိတ်ထားနိုင်ပါတယ်
 RUN npm install && npm run build
 
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
