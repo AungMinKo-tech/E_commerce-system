@@ -43,5 +43,10 @@ class AppServiceProvider extends ServiceProvider
             }
             $view->with('sharedCartCount', $cartCount);
         });
+
+        // Production ဖြစ်နေရင် https ကို Force
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
