@@ -12,8 +12,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ProductController extends Controller
 {
-    //redirect product list page
-    public function listProduct($action = "default")
+    // redirect product list page
+    public function listProduct($action = 'default')
     {
         $products = Product::select('products.id as product_id', 'products.name as product_name', 'products.price', 'products.photo', 'products.description', 'products.detail', 'categories.id as category_id', 'categories.name as category_name', 'product_colors.id as product_color_id', 'product_colors.stock', 'colors.name as color_name', 'products.created_at', 'colors.id as color_id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
@@ -24,26 +24,26 @@ class ProductController extends Controller
 
         $categories = Category::get();
 
-        return view("admin.product.list", compact("products", 'categories'));
+        return view('admin.product.list', compact('products', 'categories'));
     }
 
-    //redirect add product page
+    // redirect add product page
     public function addProductPage()
     {
         $categories = Category::all();
         $colors = Color::all();
 
-        return view("admin.product.add", compact("categories", "colors"));
+        return view('admin.product.add', compact('categories', 'colors'));
     }
 
-    //create product
+    // create product
     public function createProduct(Request $request)
     {
         // dd($request->all());
         $this->checkProductValidate($request, 'createProduct');
         $data = $this->getData($request);
 
-        $filename = uniqid() . $request->file('photo')->getClientOriginalName();
+        $filename = uniqid().$request->file('photo')->getClientOriginalName();
         $request->file('photo')->move(public_path('product_image/'), $filename);
         $data['photo'] = $filename;
 
@@ -53,7 +53,7 @@ class ProductController extends Controller
             ProductColor::create([
                 'product_id' => $product->id,
                 'color_id' => $color_id,
-                'stock' => $request->stocks[$key]
+                'stock' => $request->stocks[$key],
             ]);
         }
 
@@ -62,22 +62,22 @@ class ProductController extends Controller
         return back();
     }
 
-    //delete product
+    // delete product
     public function deleteProduct(Request $request)
     {
         // dd($request->all());
         $color = ProductColor::find($request->product_color_id);
         $product = Product::find($request->product_id);
 
-        //check remaing color
+        // check remaing color
         $remainingColors = ProductColor::where('product_id', $request->product_id)->count();
 
         $color->delete();
 
         // the last color delete the product
         if ($remainingColors == 1) {
-            if ($request->photo && file_exists(public_path('product_image/' . $request->photo))) {
-                unlink(public_path('product_image/' . $request->photo));
+            if ($request->photo && file_exists(public_path('product_image/'.$request->photo))) {
+                unlink(public_path('product_image/'.$request->photo));
             }
 
             $product->delete();
@@ -92,7 +92,7 @@ class ProductController extends Controller
         return back();
     }
 
-    //edit page view
+    // edit page view
     public function editProduct($id)
     {
         $product = Product::where('products.id', $id)
@@ -113,7 +113,7 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'colors'));
     }
 
-    //update product
+    // update product
     public function updateProduct(Request $request)
     {
         // dd($request->all());
@@ -124,14 +124,14 @@ class ProductController extends Controller
 
         // Handle photo update
         if ($request->hasFile('photo')) {
-            $oldImageName = $request->productImage; //old image name
+            $oldImageName = $request->productImage; // old image name
 
-            if ($oldImageName && file_exists(public_path('product_image/' . $oldImageName))) {
-                unlink(public_path('product_image/' . $oldImageName));
+            if ($oldImageName && file_exists(public_path('product_image/'.$oldImageName))) {
+                unlink(public_path('product_image/'.$oldImageName));
             }
 
-            $filename = uniqid() . $request->file("photo")->getClientOriginalName();
-            $request->file("photo")->move(public_path('product_image/'), $filename);
+            $filename = uniqid().$request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('product_image/'), $filename);
             $data['photo'] = $filename;
         } else {
             $data['photo'] = $request->productImage;
@@ -142,15 +142,15 @@ class ProductController extends Controller
         // Update current product color
         $existingProductColor = ProductColor::where('product_id', $request->product_id)->first();
 
-        if (!$existingProductColor) {
+        if (! $existingProductColor) {
             // Update existing record with new color and stock
             $existingProductColor->update([
                 'color_id' => $request->color_id,
-                'stock' => $request->stock
+                'stock' => $request->stock,
             ]);
         } else {
             $existingProductColor->update([
-                'stock' => $request->stock
+                'stock' => $request->stock,
             ]);
         }
 
@@ -159,12 +159,12 @@ class ProductController extends Controller
         return to_route('admin#productList');
     }
 
-    //redirect details page
+    // redirect details page
     public function detailsProduct($id, $colorId)
     {
         $product = ProductColor::where([
             ['product_id', '=', $id],
-            ['color_id', '=', $colorId]
+            ['color_id', '=', $colorId],
         ])
             ->leftJoin('products', 'product_colors.product_id', '=', 'products.id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
@@ -181,7 +181,7 @@ class ProductController extends Controller
         return view('admin.product.details', compact('product'));
     }
 
-    //get data
+    // get data
     private function getData($request)
     {
         return [
@@ -193,11 +193,11 @@ class ProductController extends Controller
         ];
     }
 
-    //check create product validation
+    // check create product validation
     private function checkProductValidate($request, $action)
     {
         $rules = ([
-            'name' => 'required|min:2|max:30|unique:products,name,' . $request->product_id,
+            'name' => 'required|min:2|max:30|unique:products,name,'.$request->product_id,
             'price' => 'required|numeric',
             'description' => 'required|string',
             'detail' => 'required|string',
@@ -214,5 +214,4 @@ class ProductController extends Controller
 
         $request->validate($rules, $message);
     }
-
 }
